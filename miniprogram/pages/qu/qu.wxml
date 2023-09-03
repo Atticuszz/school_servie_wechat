@@ -1,0 +1,121 @@
+<!--pages/qu/qu.wxml-->
+
+<!-- 快递信息 -->
+<van-cell-group inset>
+  <!-- 单元格 -->
+  <van-cell clickable bindtap="showDialog" required>
+    <!-- 左侧内容 -->
+    <view slot="title" >
+      <!-- 当 selected_site 存在时显示图片，否则显示文本 -->
+      <view wx:if="{{ selected_site }}" style="display: flex; align-items: center ;">
+        <image src="{{ selected_site.thumb }}"  style="width: 120rpx; height: 120rpx; object-fit: cover; margin-left: 48rpx;"/>
+      </view>
+      
+      <view wx:else custom-style="margin-left: 80rpx;">
+        <text>选择站点</text>
+      </view>
+    </view>
+    
+    <!-- 右侧内容 -->
+    <view slot="right-icon">
+      <!-- 如果 selected_site 存在，显示标题 -->
+      <text wx:if="{{ selected_site }}" >{{ selected_site.title }}</text>
+      <!-- 否则显示按钮 -->
+      <van-button wx:else 
+                  round
+                  block
+                  type="primary" 
+                  color="#000" 
+                  custom-style="width: 40rpx; color: #fff;"
+                  size="mini" 
+                  >选择站点
+      </van-button>
+    </view>
+  </van-cell>
+
+  <!-- 弹窗 -->
+  <van-dialog show="{{ show_delivery_sites }}" 
+              use-slot
+              width="250px"
+              showCancelButton="{{true}}" 
+              showConfirmButton="{{false}}"
+              theme="round-button"
+              title="在哪取货呀？">
+    
+    <scroll-view scroll-y="true" style="height: 650rpx;">
+      <block wx:for="{{ delivery_sites }}" wx:key="index">
+        <van-card
+          thumb="{{ item.thumb }}"
+          thumb-mode
+          title="{{ item.title }}"
+          desc="{{ item.desc }}"
+          price="0"
+        >
+        <view slot="footer" style="text-align: right;">
+            <van-button size="mini" round custom-style="width: 100rpx;" bindtap="selectDeliverySite" data-index="{{ index }}" type="primary">选我</van-button>
+          </view>
+        </van-card>
+      </block>
+    </scroll-view>
+    
+  </van-dialog>
+
+<!-- 卡片的内垂直间距 -->
+<view style="height: 2px;"></view>
+
+<van-cell required title-class="ziti" icon="https://636c-cloud1-7gfkdvn4d13b54c9-1306992154.tcb.qcloud.la/icon/jieshu.png?sign=c5dbe4f99c0a46055a07623420fb5df4&t=1630840556" title="收件信息" bind:click="go_bushouhuo" value="{{address.name}} {{address.dormitory}}  {{address.phone}}" is-link value-class="ziti">
+</van-cell>
+
+<!-- 卡片的内垂直间距 -->
+<view style="height: 2px;"></view>
+  
+
+    <van-field
+            value="{{ pick_up_code }}"
+            required
+            auto-focus
+            input-align="right"
+            placeholder="你的取件码/快递单号"
+            label="取件码"
+            left-icon="https://636c-cloud1-7gfkdvn4d13b54c9-1306992154.tcb.qcloud.la/icon/biaoti.png?sign=65994923e165758727be03c5bf6c3c82&t=1630729859"
+            clearable="aspectFill"
+            
+            placeholder-style="font-size:32rpx;"
+            bind:change="onChange_pick_up_code"
+            />
+  </van-cell-group>
+
+<!-- 卡片外的垂直间距 -->
+<view style="height: 20px;"></view>
+
+<!-- 费用部分 -->
+
+  <van-cell-group inset>
+
+    
+    <!-- 用于触发ActionSheet的单元格 -->
+    <van-cell title="快递规格" is-link bind:tap="showActionSheet" value="{{selectedExpressSize}}"></van-cell>
+    <!-- ActionSheet组件 -->
+    <van-action-sheet description="这个快递有多大？" show="{{ showActionSheet }}" actions="{{ select_express_size_actions }}" bind:select="onSelectAction"></van-action-sheet>
+    <!-- 优惠券 -->
+  </van-cell-group>
+
+        <view class="des">1. 温馨提示：任务费用越多，跑腿员越积极哦。</view>
+        <van-cell-group inset>
+          <van-field
+            value="{{ remarks }}"
+            label="备注"
+            type="textarea"
+            placeholder="你想说点什么？"
+            autosize
+            bind:change="onChange_remarks"
+          />
+        </van-cell-group>
+        <van-submit-bar
+            price="{{ final_cost*100 }}"
+            button-text="火速送达"
+            bind:submit="onSubmit"
+        />
+
+
+<!-- <map scale="16" polyline="{{polyline}}" latitude="{{latitude}}" longitude="{{longitude}}"></map> -->

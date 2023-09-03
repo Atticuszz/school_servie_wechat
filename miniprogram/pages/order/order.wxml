@@ -1,0 +1,70 @@
+<!--pages/fabu/fabu.wxml-->
+<wxs src="../../common.wxs" module="morejs" />
+
+    <block wx:if="{{orders.length!==0}}" wx:for="{{orders}}" wx:key="index">
+              <!--帮我买-->
+            <van-cell-group inset>
+               <!-- 状态条 -->
+                <van-steps steps="{{ state_steps }}" active="{{item.order_state_step}}" direction="horizontal"></van-steps>
+              <!-- 分割条 -->
+              <view style="height: 3px;"></view>
+              <!-- 商品信息 -->
+              <van-call>
+                <van-card
+                class="my-card"
+                thumb-mode="aspectFill"
+                thumb="{{ item.thumb }}"
+
+                num="1"
+                title="{{ item.title }}"
+                price="{{item.cost}}"
+              >
+              <van-button 
+                slot="tags" 
+                plain 
+                type="info" 
+                size="mini" 
+                custom-style="width: 17px; top:15px "
+              >
+                {{item.selectedExpressSize}}
+              </van-button>
+              <view slot="footer" style="text-align: right;">
+                  <van-button size="mini" round custom-style="width: 100rpx;" bindtap="selectDeliverySite" data-index="{{ index }}" type="danger">退款</van-button>
+                </view>
+              </van-card>
+              </van-call>
+              <!-- 分割条 -->
+              <view style="height: 3px;"></view>
+              <!-- 取件码 -->
+              <van-cell 
+                title="取件码" 
+                title-style="color: grey; font-size: 12px;" 
+                value="{{item.pick_up_code}}" 
+                value-style="color:; font-size: 24px;" 
+              />
+              <!-- 分割条 -->
+              <view style="height: 3px;"></view>
+
+              
+              <!-- 收件人信息 -->
+              <van-cell title-style="color: grey; font-size: 12px;" 
+               title="收件信息" 
+               value="{{item.address.recipient + ' ' + item.address.dormitory + ' ' + item.address.phone}}" />
+              <!-- 分割条 -->
+              <view style="height: 3px;"></view>
+
+              <!-- 单号和日期 -->
+              <van-cell title="订单日期" value="{{ item.created_time }}" />
+
+            </van-cell-group>
+           
+            <view style="height: 15px;"></view>
+
+             
+              
+    </block>
+    <block wx:if="{{list.length==0}}">
+          <van-empty description="空空如也" />
+    </block>
+
+

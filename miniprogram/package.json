@@ -1,0 +1,15 @@
+{
+  "name": "xiaoyuan_paotui-main",
+  "version": "1.0.0",
+  "description": "小程序端实现的功能有：发布跑腿需求、发布闲置物品信息、支持多个学校多个校区、跑腿员交接单押金、平台订单抽成、自由接单、发送短信、计算跑腿线路和预计时间、支持定位和搜索地址（也可手动输入）、跑腿员佣金和速度排行榜、评价跑腿员、查看评价等等功能，具体可以搜索“优我帮”小程序查看效果（该团队已经在运营）",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vant/weapp": "^1.10.25"
+  }
+}

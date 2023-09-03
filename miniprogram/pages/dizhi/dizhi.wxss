@@ -1,0 +1,49 @@
+/* pages/dizhi/dizhi.wxss */
+
+.jia{
+  display: flex;
+  justify-content: center;
+  margin-top: 100rpx;
+}
+.dizhi{
+  width: 90%;
+  margin-top: 50rpx;
+  margin-left: 5%;
+  border-radius: 20rpx;
+  /* 如果需要, 可以设置最小高度 */
+  min-height: 200rpx;
+  box-shadow: #dddee1 10rpx 10rpx 10rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow: hidden;
+
+  font-size: 30rpx;
+}
+.dizhi_top{
+   display: flex;
+   justify-content: space-between;
+   margin-left: 3%;
+   margin-top: 8%;
+   width: 94%;
+}
+.dizhi_center{
+  display: flex;
+  justify-content: space-between;
+  margin-left: 3%;
+  width: 94%;
+}
+.dizhi_bottom{
+  display: flex;
+  justify-content: space-between;
+  margin-left: 3%;
+  width: 94%;
+}
+.center-button {
+  margin: auto; /* 自动边距使按钮居中 */
+}
+
+
+
+
+

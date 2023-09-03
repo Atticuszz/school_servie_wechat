@@ -1,0 +1,110 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/my",
+    "pages/publish/publish",
+    "pages/order/order",
+    "pages/detail/detail",
+    "pages/fabu/fabu",
+    "pages/kefu/kefu",
+    "pages/apply/apply",
+    "pages/dizhi/dizhi",
+    "pages/parse/parse",
+    "pages/recharge/recharge",
+    "pages/reflect/reflect",
+    "pages/qu/qu",
+    "pages/mai/mai",
+    "pages/song/song",
+    "pages/other/other",
+    "pages/secondhand/secondhand",
+    "pages/paihang/paihang",
+    "pages/second_fabu/second_fabu",
+    "pages/pub_detail/pub_detail",
+    "pages/pingjia/pingjia",
+    "pages/chakan_pingjia/chakan_pingjia",
+    "pages/yijian/yijian",
+    "pages/add_dizhi/add_dizhi"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarTitleText": "填入您的微信小程序名称",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#80848f",
+    "selectedColor": "#2d8cf0",
+    "borderStyle": "white",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "images/index.png",
+        "selectedIconPath": "images/index2.png"
+      },
+      {
+        "text": "接单大厅",
+        "pagePath": "pages/publish/publish",
+        "iconPath": "images/publish.png",
+        "selectedIconPath": "images/publish2.png"
+      },
+      {
+        "text": "我的发布",
+        "pagePath": "pages/fabu/fabu",
+        "iconPath": "images/fabu.png",
+        "selectedIconPath": "images/fabu2.png"
+      },
+      {
+        "text": "我的接单",
+        "pagePath": "pages/order/order",
+        "iconPath": "images/order.png",
+        "selectedIconPath": "images/order2.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/my/my",
+        "iconPath": "images/my.png",
+        "selectedIconPath": "images/my2.png"
+      }
+    ]
+  },
+    "usingComponents": {
+      "van-field": "miniprogram_npm/@vant/weapp/field/index",
+      "van-popup": "miniprogram_npm/@vant/weapp/popup/index",
+      "van-area": "miniprogram_npm/@vant/weapp/area/index",
+      "van-cell": "miniprogram_npm/@vant/weapp/cell/index",
+      "van-cell-group": "miniprogram_npm/@vant/weapp/cell-group/index",
+      "van-action-sheet": "miniprogram_npm/@vant/weapp/action-sheet/index",
+      "van-search": "miniprogram_npm/@vant/weapp/search/index",
+      "van-picker": "miniprogram_npm/@vant/weapp/picker/index",
+      "van-datetime-picker": "miniprogram_npm/@vant/weapp/datetime-picker/index",
+      "van-uploader": "miniprogram_npm/@vant/weapp/uploader/index",
+      "van-notice-bar": "miniprogram_npm/@vant/weapp/notice-bar/index",
+      "van-icon": "miniprogram_npm/@vant/weapp/icon/index",
+      "van-tab": "miniprogram_npm/@vant/weapp/tab/index",
+      "van-tabs": "miniprogram_npm/@vant/weapp/tabs/index",
+      "van-empty": "miniprogram_npm/@vant/weapp/empty/index",
+      "van-button": "miniprogram_npm/@vant/weapp/button/index",
+      "van-switch": "miniprogram_npm/@vant/weapp/switch/index",
+      "van-submit-bar": "miniprogram_npm/@vant/weapp/submit-bar/index",
+      "van-radio": "miniprogram_npm/@vant/weapp/radio/index",
+      "van-radio-group": "miniprogram_npm/@vant/weapp/radio-group/index",
+      "van-slider": "miniprogram_npm/@vant/weapp/slider/index",
+      "van-dropdown-menu": "miniprogram_npm/@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "miniprogram_npm/@vant/weapp/dropdown-item/index",
+      "van-rate": "miniprogram_npm/@vant/weapp/rate/index",
+      "van-divider": "miniprogram_npm/@vant/weapp/divider/index",
+      "van-card": "miniprogram_npm/@vant/weapp/card/index",
+      "van-dialog": "miniprogram_npm/@vant/weapp/dialog/index",
+      "van-steps": "@vant/weapp/steps/index"
+  },
+
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}
