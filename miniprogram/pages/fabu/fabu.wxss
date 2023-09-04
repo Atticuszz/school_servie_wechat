@@ -1,96 +1,168 @@
 /* pages/fabu/fabu.wxss */
 /* pages/publish/publish.wxss */
 
-.dingdan{
-  width: 94%;
-  margin-left: 3%;
-  height: 400rpx;
-  border-radius: 20rpx;
-  box-shadow: #dddee1 10rpx 10rpx 10rpx 10rpx;
-  background-color: white;
-  margin-top: 30rpx;
-  margin-bottom: 20rpx;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  font-size: 30rpx;
-  
-}
-.dingdan_top{
-width: 95%;
-height: 15%;
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-overflow: hidden;
-margin-left: 2%;
-color: #495060;
+.dingdan {
+    width: 94%;
+    margin-left: 3%;
+    height: 400rpx;
+    border-radius: 20rpx;
+    box-shadow: #dddee1 10rpx 10rpx 10rpx 10rpx;
+    background-color: white;
+    margin-top: 30rpx;
+    margin-bottom: 20rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 30rpx;
 
 }
-.dingdan_top1{
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   
-}
-.dingdan_center{
- width: 95%;
- height: 50%;
- display: flex;
- flex-direction: column;
- justify-content: space-around;
- align-items: center;
- overflow: hidden;
- margin-left: 2%;
- 
-}
-.dingdan_centernotes{
-  width: 90%;
-  overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  
-}
-.dingdan_centerleft{
-   width: 95%;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   
-   overflow: hidden;
-   flex-wrap: nowrap;
-}
-.dingdan_centermai{
-width: 50%;
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
 
-overflow: hidden;
-flex-wrap: nowrap;
+.dingdan_top {
+    width: 95%;
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    margin-left: 2%;
+    color: #495060;
+
 }
-.dangdan_bottom{
-margin-left: 2%;
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
+
+.dingdan_top1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
 }
-.dangdan_bottom1{
-margin-left: 2%;
-display: flex;
-flex-direction: row;
-justify-content: flex-end;
-align-items: flex-end;
+
+.dingdan_center {
+    width: 95%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    margin-left: 2%;
+
 }
-.bottom{
-display: flex;
-flex-direction: row;
-justify-content: flex-end;
-margin-bottom: 2%;
+
+.dingdan_centernotes {
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+}
+
+.dingdan_centerleft {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    flex-wrap: nowrap;
+}
+
+.dingdan_centermai {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    flex-wrap: nowrap;
+}
+
+.dangdan_bottom {
+    margin-left: 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dangdan_bottom1 {
+    margin-left: 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 2%;
+}
+
+/*my*/
+.coupon-container {
+    width: 225rpx;
+    height: 225rpx;
+    margin-top: 20rpx;
+}
+
+.coupon-image {
+    width: 100%;
+    height: 100%;
+}
+
+.coupon-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* 如果你想要右对齐 */
+
+}
+
+.title-strength-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.coupon-strength-left {
+    color: grey; /* 灰色字体 */
+    font-size: 28rpx; /* 小字体 */
+    margin-right: 5rpx; /* 添加一点空间在两个文本元素之间 */
+}
+
+.coupon-strength-right {
+    color: #ff003f; /* 橙色字体 */
+    font-size: 40rpx; /* 大字体 */
+}
+
+.coupon-tag {
+    margin-bottom: 10rpx;
+    margin-top: 13rpx;
+}
+
+.coupon-strength {
+    margin-bottom: 10rpx;
+}
+
+.tag-and-date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10rpx;
+}
+
+.expire-date {
+    color: #949090; /* 字体颜色 */
+    font-size: 26rpx; /* 字体大小 */
+    margin-right: 20rpx; /* 右边距 */
+    margin-top: 0;
+}
+
+.strength-container {
+    display: flex;
+    justify-content: flex-end;
 }

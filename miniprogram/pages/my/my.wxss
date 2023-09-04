@@ -60,3 +60,9 @@ page{
 .jiedan{
   font-size: 30rpx;
 }
+
+.my-grid {
+  position: relative;
+  z-index: -2;
+}
+

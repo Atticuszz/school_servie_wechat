@@ -97,7 +97,10 @@
       "van-divider": "miniprogram_npm/@vant/weapp/divider/index",
       "van-card": "miniprogram_npm/@vant/weapp/card/index",
       "van-dialog": "miniprogram_npm/@vant/weapp/dialog/index",
-      "van-steps": "@vant/weapp/steps/index"
+      "van-steps": "@vant/weapp/steps/index",
+      "van-grid": "@vant/weapp/grid/index",
+      "van-grid-item": "@vant/weapp/grid-item/index",
+      "van-tag": "@vant/weapp/tag/index"
   },
 
   "permission": {

@@ -18,6 +18,7 @@ App({
       openid:'',
       channel:'跑腿资讯',
       campus:'',
+      credits: 100000
     }
   }
 })
