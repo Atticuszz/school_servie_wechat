@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 const TcbRouter = require('tcb-router'); //云函数路由
 cloud.init({
-  env: 'paotui-8ge9jrloec8bcc3b'
+  env: 'school2service-0gp1dcf9a73528f4'
 })
 
 const db = cloud.database();

@@ -1,7 +1,9 @@
-<!--pages/fabu/fabu.wxml-->
+<!--pages/fabu/coupon.wxml-->
 
+        <!-- 这里是你的其他 WXML 代码 -->
+<van-toast id="van-toast"/>
 
-<van-tabs animated sticky bind:change="onChange_coupon">
+<van-tabs animated sticky>
     <van-tab title="可用">
         <block wx:for="{{ redeemable_coupons }}" wx:key="index">
             <view style="height: 5px;"></view>
@@ -11,7 +13,7 @@
                 <van-cell custom-class="custom-cell">
 
                     <view slot="icon" class="coupon-container">
-                        <image src="https://7061-paotui-8ge9jrloec8bcc3b-1320506061.tcb.qcloud.la/%E5%9F%BA%E7%A1%80%E5%9B%BE%E7%89%87/coupon2.jpg?sign=f4f47a1e389a608056eec5d26d0125ab&t=1693816570"
+                        <image src="{{imageUrl.coupon}}"
                                class="coupon-image"/>
                     </view>
 
@@ -19,7 +21,7 @@
                         <view class="title-strength-button-container">
                             <view class="tag-and-date">
                                 <text class="expire-date">{{item.due_time}} 前可用</text> <!-- 这里是截止日期 -->
-                                <van-tag color="#ff8800" plain type="large" custom-class="coupon-tag">{{item.name}}
+                                <van-tag color="#ff8800" plain type="big" custom-class="coupon-tag">{{item.name}}
                                 </van-tag>
                             </view>
                             <text class="coupon-strength-left">满0.0￥</text>
@@ -31,6 +33,8 @@
                                 plain
                                 round
                                 block
+                                data-coupon="{{item}}"
+                                bind:click="select_coupon"
                                 size="mini"
                                 type="primary"
                         >
@@ -40,6 +44,9 @@
                 </van-cell>
 
             </van-cell-group>
+        </block>
+        <block wx:if="{{redeemable_coupons.length===0}}">
+            <van-empty description="空空如也"/>
         </block>
     </van-tab>
     <van-tab title="可领">
@@ -57,7 +64,7 @@
                 <van-cell custom-class="custom-cell">
 
                     <view slot="icon" class="coupon-container">
-                        <image src="https://7061-paotui-8ge9jrloec8bcc3b-1320506061.tcb.qcloud.la/%E5%9F%BA%E7%A1%80%E5%9B%BE%E7%89%87/coupon2.jpg?sign=f4f47a1e389a608056eec5d26d0125ab&t=1693816570"
+                        <image src="{{imageUrl.coupon}}"
                                class="coupon-image"/>
                     </view>
 
@@ -65,7 +72,7 @@
                         <view class="title-strength-button-container">
                             <view class="tag-and-date">
                                 <text class="expire-date">满{{item.requirement}}可领</text> <!-- 这里是截止日期 -->
-                                <van-tag color="#ff8800" plain type="large" custom-class="coupon-tag">{{item.name}}
+                                <van-tag color="#ff8800" plain type="big" custom-class="coupon-tag">{{item.name}}
                                 </van-tag>
                             </view>
                             <text class="coupon-strength-left">满0.0￥</text>
@@ -100,7 +107,7 @@
                 <van-cell custom-class="custom-cell">
 
                     <view slot="icon" class="coupon-container">
-                        <image src="https://7061-paotui-8ge9jrloec8bcc3b-1320506061.tcb.qcloud.la/%E5%9F%BA%E7%A1%80%E5%9B%BE%E7%89%87/coupon2.jpg?sign=f4f47a1e389a608056eec5d26d0125ab&t=1693816570"
+                        <image src="{{imageUrl.coupon}}"
                                class="coupon-image"/>
                     </view>
 
@@ -108,11 +115,11 @@
                         <view class="title-strength-button-container">
                             <view class="tag-and-date">
                                 <text class="expire-date">{{item.due_time}}前可用</text> <!-- 这里是截止日期 -->
-                                <van-tag color="#ff8800" plain type="large" custom-class="coupon-tag">{{item.name}}
+                                <van-tag color="#ff8800" plain type="big" custom-class="coupon-tag">{{item.name}}
                                 </van-tag>
                             </view>
                             <text class="coupon-strength-left">满0.0￥</text>
-                            <text class="coupon-strength-right">{{item.discout * 100}}%</text>
+                            <text class="coupon-strength-right">{{item.discount * 100}}%</text>
                         </view>
                     </view>
                     <view style="margin-top:40rpx;">
@@ -131,7 +138,11 @@
 
             </van-cell-group>
         </block>
+        <block wx:if="{{due_coupons.length===0}}">
+            <van-empty description="空空如也"/>
+        </block>
     </van-tab>
+
     <van-tab title="口令">
         <van-cell-group inset>
 
@@ -156,4 +167,5 @@
     </van-tab>
 
 </van-tabs>
+
 

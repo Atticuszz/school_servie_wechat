@@ -6,6 +6,7 @@
         
 
           <view class="dizhi_top">
+
           <view>姓名:</view>
                 <view>{{item.name}}</view>
                 

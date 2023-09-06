@@ -1,5 +1,4 @@
 /* pages/qu/qu.wxss */
-
 .ziti{
   font-size: 32rpx;
   margin-top: 10rpx;
@@ -106,4 +105,9 @@
   position: relative;
   z-index: 5;
 }
+.custom-card {
+  max-width: 300rpx !important; /* 使用 !important 以确保样式生效 */
+  margin: auto; /* 可以用于水平居中，如果需要的话 */
+}
+
 

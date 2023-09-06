@@ -3,7 +3,7 @@
 
 
 <image class="tou_img" style="width:100%;"
-       src="https://7061-paotui-8ge9jrloec8bcc3b-1320506061.tcb.qcloud.la/%E5%9F%BA%E7%A1%80%E5%9B%BE%E7%89%87/my_cover.jpg?sign=e40864a9af454f62e57b049c4f73acfb&t=1693795656"></image>
+       src="{{imageUrl.background}}"></image>
 <view class="touxiang">
     <view class="img">
 
@@ -12,8 +12,6 @@
     </view>
     <view class="tou_ren">
         <open-data type="userNickName"></open-data>
-        <image wx:if="{{show==3}}" mode="aspectFit" style="width: 50rpx; height: 50rpx;"
-               src="/images/renzheng.png"></image>
     </view>
 </view>
         <!--单元格-->
@@ -75,3 +73,5 @@
 <view class="dibu">
     <text>——东南大学提供服务——</text>
 </view>
+
+

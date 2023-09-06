@@ -17,7 +17,7 @@ const smsSign = '填入您申请的签名';
 
 // 实例化smsClient
 cloud.init({
-  env: 'paotui-8ge9jrloec8bcc3b'
+  env: 'school2service-0gp1dcf9a73528f4'
 });
 
 // 云函数入口函数

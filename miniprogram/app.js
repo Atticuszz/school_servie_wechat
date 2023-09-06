@@ -9,7 +9,7 @@ App({
         //   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
         //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
         //   如不填则使用默认环境（第一个创建的环境）
-        env: 'paotui-8ge9jrloec8bcc3b',
+        env: 'school2service-0gp1dcf9a73528f4',
         traceUser: true,
       })
     }
@@ -17,7 +17,13 @@ App({
     this.globalData = {
       openid:'',
       channel:'跑腿资讯',
-      campus:'',
+      pick_up_code:'',
+      selectedExpressSize:null,
+      selectedExpressSizeIndex:-1,
+      selected_site:null,
+      selected_site_index:null,
+      address:null,
+      coupon: {'discount': 1},
       credits: 100000
     }
   }

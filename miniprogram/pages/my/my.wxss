@@ -32,8 +32,10 @@ page{
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  
-  width: 100%;
+  background-color:  rgba(240, 240, 240, 0.75);  /* 背景色 */
+  padding: 10px;  /* 内边距 */
+  border-radius: 5px;  /* 圆角 */
+  width: 25%;
   height: 30%;
 }
 

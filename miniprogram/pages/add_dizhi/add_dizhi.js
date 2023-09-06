@@ -12,7 +12,7 @@ Page({
     choose_dormitory:'',
     name:'',
     phone:'',
-    deliver_period:["下午",'晚上'],
+    deliver_period:["中午",'晚上'],
     deliver_period_show:false,
     choose_deliver_period:'',
     openid:""
