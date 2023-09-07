@@ -20,25 +20,25 @@
         <text class="margin-right:15rpx">取快递</text>
     </view>
     <view class="dai_li1">
-        <image src="{{icon.developing}}" class="margin-left:20rpx"></image>
+        <image src="{{icon.developing}}" class="margin-left:20rpx" bind:tap="developing_func"></image>
         <text class="margin-right:15rpx">开发中</text>
     </view>
     <view class="dai_li1">
-        <image src="{{icon.developing}}" class="margin-left:20rpx"></image>
+        <image src="{{icon.developing}}" class="margin-left:20rpx" bind:tap="developing_func"></image>
         <text class="margin-right:15rpx">开发中</text>
     </view>
     <view class="dai_li1">
-        <image src="{{icon.developing}}" class="margin-left:20rpx"></image>
+        <image src="{{icon.developing}}" class="margin-left:20rpx" bind:tap="developing_func"></image>
         <text class="margin-right:15rpx" >开发中</text>
     </view>
 
     <view class="dai_li1" >
-        <image src="{{icon.developing}}" class="margin-left:20rpx"></image>
+        <image src="{{icon.developing}}" class="margin-left:20rpx" bind:tap="developing_func"></image>
         <text class="margin-right:15rpx">开发中</text>
     </view>
 
     <view class="dai_li1">
-        <image src="{{icon.developing}}" class="margin-left:20rpx"></image>
+        <image src="{{icon.developing}}" class="margin-left:20rpx" bind:tap="developing_func"></image>
         <text class="margin-right:15rpx">开发中</text>
     </view>
 

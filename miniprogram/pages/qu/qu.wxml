@@ -121,7 +121,6 @@
     </van-cell>
 </van-cell-group>
 
-<view class="des">1. 温馨提示：任务费用越多，跑腿员越积极哦。</view>
 <van-cell-group inset>
     <van-field
             value="{{ remarks }}"

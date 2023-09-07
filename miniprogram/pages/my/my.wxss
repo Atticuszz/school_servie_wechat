@@ -23,10 +23,6 @@ page{
   overflow: hidden;
   
 }
-.ziti{
-  font-size: 32rpx;
-  margin-top: 10rpx;
-}
 .tou_ren{
   display: flex;
   flex-direction: row;
@@ -35,7 +31,7 @@ page{
   background-color:  rgba(240, 240, 240, 0.75);  /* 背景色 */
   padding: 10px;  /* 内边距 */
   border-radius: 5px;  /* 圆角 */
-  width: 25%;
+  width: 40%;
   height: 30%;
 }
 
@@ -44,27 +40,5 @@ page{
   height: 100rpx;
   border-radius: 10rpx;
   overflow: hidden;
-}
-.dibu{
-  width: 100%;
-  color: #495060;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  height: 50rpx;
-  font-size: 30rpx;
-  margin-top: 100rpx;
-}
-.zhong{
-  margin-top: 65rpx;
-}
-.jiedan{
-  font-size: 30rpx;
-}
-
-.my-grid {
-  position: relative;
-  z-index: -2;
 }
 

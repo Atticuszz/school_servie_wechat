@@ -277,7 +277,7 @@ var Utils = {
      * 得到终点query字符串
      * @param {Array|String} 检索数据
      */
-    location2query(data) {
+    dizhi2query(data) {
         if (typeof data == 'string') {
             return data;
         }
@@ -287,8 +287,8 @@ var Utils = {
             if (!!query) {
                 query += ';';
             }
-            if (d.location) {
-                query = query + d.location.lat + ',' + d.location.lng;
+            if (d.dizhi) {
+                query = query + d.dizhi.lat + ',' + d.dizhi.lng;
             }
             if (d.latitude && d.longitude) {
                 query = query + d.latitude + ',' + d.longitude;
@@ -304,19 +304,19 @@ var Utils = {
       return d * Math.PI / 180.0;
     },  
     /**
-     * 处理终点location数组
+     * 处理终点dizhi数组
      * @return 返回终点数组
      */
-    getEndLocation(location){
-      var to = location.split(';');
-      var endLocation = [];
+    getEnddizhi(dizhi){
+      var to = dizhi.split(';');
+      var enddizhi = [];
       for (var i = 0; i < to.length; i++) {
-        endLocation.push({
+        enddizhi.push({
           lat: parseFloat(to[i].split(',')[0]),
           lng: parseFloat(to[i].split(',')[1])
         })
       }
-      return endLocation;
+      return enddizhi;
     },
 
     /**
@@ -338,8 +338,8 @@ var Utils = {
     /**
      * 使用微信接口进行定位
      */
-    getWXLocation(success, fail, complete) {
-        wx.getLocation({
+    getWXdizhi(success, fail, complete) {
+        wx.getdizhi({
             type: 'gcj02',
             success: success,
             fail: fail,
@@ -348,21 +348,21 @@ var Utils = {
     },
 
     /**
-     * 获取location参数
+     * 获取dizhi参数
      */
-    getLocationParam(location) {
-        if (typeof location == 'string') {
-            var locationArr = location.split(',');
-            if (locationArr.length === 2) {
-                location = {
-                    latitude: location.split(',')[0],
-                    longitude: location.split(',')[1]
+    getdizhiParam(dizhi) {
+        if (typeof dizhi == 'string') {
+            var dizhiArr = dizhi.split(',');
+            if (dizhiArr.length === 2) {
+                dizhi = {
+                    latitude: dizhi.split(',')[0],
+                    longitude: dizhi.split(',')[1]
                 };
             } else {
-                location = {};
+                dizhi = {};
             }
         }
-        return location;
+        return dizhi;
     },
 
     /**
@@ -400,14 +400,14 @@ var Utils = {
     },
 
     /**
-     * 验证location值
+     * 验证dizhi值
      * 
      * @param {Object} param 接口参数
      */
-    checkLocation(param) {
-        var location = this.getLocationParam(param.location);
-        if (!location || !location.latitude || !location.longitude) {
-            var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + ' location参数格式有误');
+    checkdizhi(param) {
+        var dizhi = this.getdizhiParam(param.dizhi);
+        if (!dizhi || !dizhi.latitude || !dizhi.longitude) {
+            var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + ' dizhi参数格式有误');
             param.fail(errconf);
             param.complete(errconf);
             return false;
@@ -450,8 +450,8 @@ var Utils = {
           searchSimplify.push({
             id: searchResult[i].id || null,
             title: searchResult[i].title || null,
-            latitude: searchResult[i].location && searchResult[i].location.lat || null,
-            longitude: searchResult[i].location && searchResult[i].location.lng || null,
+            latitude: searchResult[i].dizhi && searchResult[i].dizhi.lat || null,
+            longitude: searchResult[i].dizhi && searchResult[i].dizhi.lng || null,
             address: searchResult[i].address || null,
             category: searchResult[i].category || null,
             tel: searchResult[i].tel || null,
@@ -476,8 +476,8 @@ var Utils = {
             city: suggestResult[i].city || null,
             district: suggestResult[i].district || null,
             id: suggestResult[i].id || null,
-            latitude: suggestResult[i].location && suggestResult[i].location.lat || null,
-            longitude: suggestResult[i].location && suggestResult[i].location.lng || null,
+            latitude: suggestResult[i].dizhi && suggestResult[i].dizhi.lat || null,
+            longitude: suggestResult[i].dizhi && suggestResult[i].dizhi.lng || null,
             province: suggestResult[i].province || null,
             title: suggestResult[i].title || null,
             type: suggestResult[i].type || null
@@ -491,8 +491,8 @@ var Utils = {
         var reverseGeocoderResult = data.result;
         var reverseGeocoderSimplify = {
           address: reverseGeocoderResult.address || null,
-          latitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lat || null,
-          longitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lng || null,
+          latitude: reverseGeocoderResult.dizhi && reverseGeocoderResult.dizhi.lat || null,
+          longitude: reverseGeocoderResult.dizhi && reverseGeocoderResult.dizhi.lng || null,
           adcode: reverseGeocoderResult.ad_info && reverseGeocoderResult.ad_info.adcode || null,
           city: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.city || null,
           district: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.district || null,
@@ -510,8 +510,8 @@ var Utils = {
             poisSimplify.push({
               id: pois[i].id || null,
               title: pois[i].title || null,
-              latitude: pois[i].location && pois[i].location.lat || null,
-              longitude: pois[i].location && pois[i].location.lng || null,
+              latitude: pois[i].dizhi && pois[i].dizhi.lat || null,
+              longitude: pois[i].dizhi && pois[i].dizhi.lng || null,
               address: pois[i].address || null,
               category: pois[i].category || null,
               adcode: pois[i].ad_info && pois[i].ad_info.adcode || null,
@@ -536,8 +536,8 @@ var Utils = {
         var geocoderResult = data.result;
         var geocoderSimplify = {
           title: geocoderResult.title || null,
-          latitude: geocoderResult.location && geocoderResult.location.lat || null,
-          longitude: geocoderResult.location && geocoderResult.location.lng || null,
+          latitude: geocoderResult.dizhi && geocoderResult.dizhi.lat || null,
+          longitude: geocoderResult.dizhi && geocoderResult.dizhi.lng || null,
           adcode: geocoderResult.ad_info && geocoderResult.ad_info.adcode || null,
           province: geocoderResult.address_components && geocoderResult.address_components.province || null,
           city: geocoderResult.address_components && geocoderResult.address_components.city || null,
@@ -631,22 +631,22 @@ var Utils = {
     /**
      * 处理用户参数是否传入坐标进行不同的处理
      */
-    locationProcess(param, locationsuccess, locationfail, locationcomplete) {
+    dizhiProcess(param, dizhisuccess, dizhifail, dizhicomplete) {
         var that = this;
-        locationfail = locationfail || function (res) {
+        dizhifail = dizhifail || function (res) {
             res.statusCode = ERROR_CONF.WX_ERR_CODE;
             param.fail(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
         };
-        locationcomplete = locationcomplete || function (res) {
+        dizhicomplete = dizhicomplete || function (res) {
             if (res.statusCode == ERROR_CONF.WX_ERR_CODE) {
                 param.complete(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
             }
         };
-        if (!param.location) {
-            that.getWXLocation(locationsuccess, locationfail, locationcomplete);
-        } else if (that.checkLocation(param)) {
-            var location = Utils.getLocationParam(param.location);
-            locationsuccess(location);
+        if (!param.dizhi) {
+            that.getWXdizhi(dizhisuccess, dizhifail, dizhicomplete);
+        } else if (that.checkdizhi(param)) {
+            var dizhi = Utils.getdizhiParam(param.dizhi);
+            dizhisuccess(dizhi);
         }
     }
 };
@@ -716,7 +716,7 @@ class QQMapWX {
           rectangle = options.rectangle;
         }
 
-        var locationsuccess = function (result) {        
+        var dizhisuccess = function (result) {        
           if (region && !rectangle) {
             //城市限定参数拼接
             requestParam.boundary = "region(" + region + "," + auto_extend + "," + result.latitude + "," + result.longitude + ")";
@@ -740,7 +740,7 @@ class QQMapWX {
                 data: requestParam
             }, 'search'));
         };
-        Utils.locationProcess(options, locationsuccess);
+        Utils.dizhiProcess(options, dizhisuccess);
     };
 
     /**
@@ -780,9 +780,9 @@ class QQMapWX {
           requestParam.filter = options.filter;
         }
         //排序
-        if (options.location) {
-          var locationsuccess = function (result) {
-            requestParam.location = result.latitude + ',' + result.longitude;
+        if (options.dizhi) {
+          var dizhisuccess = function (result) {
+            requestParam.dizhi = result.latitude + ',' + result.longitude;
             if (options.sig) {
               requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
             }
@@ -791,7 +791,7 @@ class QQMapWX {
               data: requestParam
             }, "suggest"));      
           };
-          Utils.locationProcess(options, locationsuccess);
+          Utils.dizhiProcess(options, dizhisuccess);
         } else {
           if (options.sig) {
             requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
@@ -825,8 +825,8 @@ class QQMapWX {
             requestParam.poi_options = options.poi_options
         }
 
-        var locationsuccess = function (result) {
-            requestParam.location = result.latitude + ',' + result.longitude;
+        var dizhisuccess = function (result) {
+            requestParam.dizhi = result.latitude + ',' + result.longitude;
           if (options.sig) {
             requestParam.sig = Utils.getSig(requestParam, options.sig, 'reverseGeocoder');
           }
@@ -835,7 +835,7 @@ class QQMapWX {
                 data: requestParam
             }, 'reverseGeocoder'));
         };
-        Utils.locationProcess(options, locationsuccess);
+        Utils.dizhiProcess(options, dizhisuccess);
     };
 
     /**
@@ -960,19 +960,19 @@ class QQMapWX {
 
         var requestParam = {
             mode: options.mode || 'walking',
-            to: Utils.location2query(options.to),
+            to: Utils.dizhi2query(options.to),
             output: 'json',
             key: that.key
         };
 
         if (options.from) {
-          options.location = options.from;
+          options.dizhi = options.from;
         }
 
         //计算直线距离
         if(requestParam.mode == 'straight'){        
-          var locationsuccess = function (result) {
-            var locationTo = Utils.getEndLocation(requestParam.to);//处理终点坐标
+          var dizhisuccess = function (result) {
+            var dizhiTo = Utils.getEnddizhi(requestParam.to);//处理终点坐标
             var data = {
               message:"query ok",
               result:{
@@ -980,17 +980,17 @@ class QQMapWX {
               },
               status:0
             };
-            for (var i = 0; i < locationTo.length; i++) {
+            for (var i = 0; i < dizhiTo.length; i++) {
               data.result.elements.push({//将坐标存入
-                distance: Utils.getDistance(result.latitude, result.longitude, locationTo[i].lat, locationTo[i].lng),
+                distance: Utils.getDistance(result.latitude, result.longitude, dizhiTo[i].lat, dizhiTo[i].lng),
                 duration:0,
                 from:{
                   lat: result.latitude,
                   lng:result.longitude
                 },
                 to:{
-                  lat: locationTo[i].lat,
-                  lng: locationTo[i].lng
+                  lat: dizhiTo[i].lat,
+                  lng: dizhiTo[i].lng
                 }
               });            
             }
@@ -1005,9 +1005,9 @@ class QQMapWX {
             });
           };
           
-          Utils.locationProcess(options, locationsuccess);
+          Utils.dizhiProcess(options, dizhisuccess);
         } else {
-          var locationsuccess = function (result) {
+          var dizhisuccess = function (result) {
             requestParam.from = result.latitude + ',' + result.longitude;
             if (options.sig) {
               requestParam.sig = Utils.getSig(requestParam, options.sig, 'calculateDistance');
@@ -1018,7 +1018,7 @@ class QQMapWX {
             },'calculateDistance'));
           };
 
-          Utils.locationProcess(options, locationsuccess);
+          Utils.dizhiProcess(options, dizhisuccess);
         }      
     };
 
@@ -1059,7 +1059,7 @@ class QQMapWX {
     SET_URL_DIRECTION = URL_DIRECTION + options.mode;
 
     if (options.from) {
-      options.location = options.from;
+      options.dizhi = options.from;
     }
 
     if (options.mode == MODE.driving) {
@@ -1104,7 +1104,7 @@ class QQMapWX {
       }
     } 
 
-    var locationsuccess = function (result) {
+    var dizhisuccess = function (result) {
       requestParam.from = result.latitude + ',' + result.longitude;
       if (options.sig) {
         requestParam.sig = Utils.getSig(requestParam, options.sig, 'direction',options.mode);
@@ -1115,7 +1115,7 @@ class QQMapWX {
       }, 'direction'));
     };
 
-    Utils.locationProcess(options, locationsuccess);
+    Utils.dizhiProcess(options, dizhisuccess);
   }
 };
 

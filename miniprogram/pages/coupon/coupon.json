@@ -1,6 +1,4 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "优惠券",
-  "enablePullDownRefresh": true
-
+  "navigationBarTitleText": "优惠券"
 }

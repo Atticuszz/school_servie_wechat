@@ -37,11 +37,6 @@ page{
   width: 100rpx;
   height: 100rpx;
 }
-
-.tongzhi{
-  margin-top: 120rpx;
-}
-
 .dai{
   background-color: white;
   width: 100%;
@@ -70,40 +65,4 @@ page{
 .dai_li1 image{
   height: 50%;
   width: 35%;
-}
-
-.yige{
-  
-  width: 100%;
-  padding: 25rpx;
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-}
-
-.dakuang{
-  background-color: white;
-  width: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction:column;
-  justify-content: center;
-  
-  border-radius: 30rpx;
-  
-}
-.zuoxia{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.zuoxia2{
-  width: 190rpx;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.wen{
-  margin-top: 20rpx;
-  width: 100%;
 }

@@ -29,6 +29,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        app.check_locked();
         let that = this;
         wx.getStorage({
             key: 'openid',
@@ -82,17 +83,25 @@ Page({
         })
     },
     //待开发
-    daikaifa: function () {
+    developing_func: function () {
         let that = this;
         wx.showToast({
-            title: '待开发，请耐心等待',
-            icon: 'none',
-            duration: 2000
+            title: '开发中，请耐心等待~',
+            icon: 'loading',
+            duration: 4000
         })
 
     },
 
-
+    check_locked: function () {
+        if(app.globalData.system_locked){
+            wx.showToast({
+                title: '系统已锁定！',
+                icon: 'none',
+                duration: 0
+            })
+        }
+    },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
@@ -104,6 +113,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
+        app.check_locked();
         if (typeof this.getTabBar === 'function' &&
             this.getTabBar()) {
             this.getTabBar().init()

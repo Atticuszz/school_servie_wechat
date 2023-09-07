@@ -1,13 +1,7 @@
 // pages/qu/qu.js
-// 引入地图SDK核心类
-var QQMapWX = require('../../util/qqmap-wx-jssdk.js');
-// 实例化API核心类
-var qqmapsdk = new QQMapWX({
-    key: 'PBFBZ-Y3D66-JUWSY-M2MNG-MI2EZ-SPBBY' // 必填
-});
+
 const app = getApp();
 const db = wx.cloud.database();
-import Toast from '@vant/weapp/toast/toast';
 
 Page({
 
@@ -67,36 +61,7 @@ Page({
 
         // 优惠券
         selected_coupon: null,
-        express: '',
 
-        polyline: [],
-        distance: 0,
-        duration: 0,
-
-        start_location: '',
-        end_location: '',
-
-        start_latitude: '',
-        start_longitude: '',
-        end_latitude: '',
-        end_longitude: '',
-        no_jisuan: false,
-
-        starttime_show: false,
-        endtime_show: false,
-        start_time: '请选择取件时间',
-        end_time: '请选择送达时间',
-        minDate: new Date().getTime(),
-        cost: 3,
-        error_red: false,
-        notes: '',
-        checked: false,
-        user_parse: false,
-        balance: 0,
-        user_id: '',
-        note_counts: 0,
-        fileList: [],
-        linshi: [],  //存放图片的临时地址
     },
     // 选择快递站点
     selectDeliverySite(e) {
@@ -335,7 +300,7 @@ Page({
         }
         if (this.data.final_cost === 0) {
             wx.showToast({
-                title: '支付中...',
+                title: '提交订单中...',
                 icon: 'loading',
                 duration: 10000 // 这里可以设置持续时间
             });
@@ -359,7 +324,7 @@ Page({
                 icon: 'success',
                 duration: 2000 // 持续时间为3秒
             });
-
+            that.refresh_data()
             return false;
         }
         app.globalData.credits += this.data.final_cost * 100
@@ -382,17 +347,18 @@ Page({
 
             })
             wx.showToast({
-                title: '支付成功',
+                title: '提交订单成功',
                 icon: 'success',
                 duration: 2000 // 持续时间为3秒
             });
-
+            that.refresh_data();
         }).catch(err => {
             console.error('删除失败', err);
             console.log("consume_coupon:", this.data.selected_coupon);
-            Toast.fail({
-                message: '消费优惠券失败！',
-                context: this,
+            wx.showToast({
+                title: '消费优惠券失败',
+                icon: 'none',
+                duration: 4000 // 持续时间为3秒
             });
         });
     },
@@ -443,13 +409,14 @@ Page({
     pay: function () {
         let that = this;
         let trade_no = Date.now().toString() + Math.floor(Math.random() * 1000).toString()
+        const totalFee = parseInt(that.data.final_cost*100);
+        console.log("totalFee",totalFee);
         wx.cloud.callFunction({
             name: 'pay',  //云函数的名称，在后面我们会教大家怎么建
             data: {
                 body: '代取快递',
                 outTradeNo: trade_no,
-                totalFee: that.data.final_cost,
-                nonceStr: '5K8264ILTKCH16CQ2502SI8ZNMTM67VS'
+                totalFee: totalFee,
             },
             success: res => {
                 console.log("successfully call wx.cloud.pay,  res:", res);
@@ -478,7 +445,7 @@ Page({
                             success: function (res) {
                                 console.log("successfully called wx.paysuc,res:", res)
                                 wx.showToast({
-                                    title: '支付中...',
+                                    title: '提交订单中...',
                                     icon: 'loading',
                                     duration: 10000 // 这里可以设置持续时间
                                 });
@@ -503,7 +470,7 @@ Page({
                     },
                     fail(err) {
                         wx.showToast({
-                            title: '支付失败, err: failed called wx.requestPayment',
+                            title: '支付失败, err:' + err.errMsg,
                             icon: 'none',
                             duration: 4500 // 持续时间为3秒
                         });
@@ -599,37 +566,8 @@ Page({
         // 订单记录，用户查看
 
     },
-    //获取后台的抽成费率
-    get_rate: function () {
-        let that = this;
-        db.collection('campus').where({
-            campus_name: that.data.choose_campus,
-        }).get({
-            success: function (res) {
-                console.log(res.data[0].rate)
-                let rate = 1 - res.data[0].rate
-                // 把抽成费率传给add_publish函数进行增加数据处理
-                let cost = (rate * that.data.cost).toFixed(1)
-                let costs = parseFloat(cost)
-                that.add_publish(costs)
-            }
-        })
-    },
-    set_final_cost: function () {
-
-        this.setData({});
-
-    },
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady: function () {
-    },
-
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function () {
+    refresh_data: function () {
+        console.log("refresh_data is called")
         const index = app.globalData.selectedExpressSizeIndex;
         let final_cost = 999;
         if (index !== -1) {
@@ -661,6 +599,18 @@ Page({
         console.log("selectedExpressSize=", this.data.selectedExpressSize);
         console.log("express_size=", this.data.express_size);
     },
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+        this.refresh_data();
+    },
 
     navigate2coupon: function () {
         wx.switchTab({
@@ -668,7 +618,7 @@ Page({
         });
     },
     go_bushouhuo: function () {
-        let that = this;
+        console.log("go_bushouhuo is called");
         wx.navigateTo({
             url: '/pages/dizhi/dizhi',
         })

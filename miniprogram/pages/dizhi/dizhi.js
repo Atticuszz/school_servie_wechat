@@ -53,7 +53,7 @@ Page({
   // 获取地址
   get_dizhi:function(){
     let that = this;
-   
+   console.log("get _dizhi is called");
     db.collection('shippinp_address').where({
       _openid:app.globalData.openid,
     }).orderBy('creat','desc').limit(20).get({

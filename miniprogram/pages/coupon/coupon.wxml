@@ -159,7 +159,7 @@
             </van-field>
             <van-cell style="width:20rpx">
                 <van-button size="mini" type="primary">
-                    发送验证码
+                    领取积分
                 </van-button>
             </van-cell>
         </van-cell-group>

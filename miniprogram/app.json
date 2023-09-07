@@ -2,27 +2,12 @@
   "pages": [
     "pages/index/index",
     "pages/my/my",
-    "pages/publish/publish",
     "pages/order/order",
-    "pages/detail/detail",
     "pages/coupon/coupon",
-    "pages/kefu/kefu",
-    "pages/apply/apply",
     "pages/dizhi/dizhi",
     "pages/parse/parse",
     "pages/recharge/recharge",
-    "pages/reflect/reflect",
     "pages/qu/qu",
-    "pages/mai/mai",
-    "pages/song/song",
-    "pages/other/other",
-    "pages/secondhand/secondhand",
-    "pages/paihang/paihang",
-    "pages/second_fabu/second_fabu",
-    "pages/pub_detail/pub_detail",
-    "pages/pingjia/pingjia",
-    "pages/chakan_pingjia/chakan_pingjia",
-    "pages/yijian/yijian",
     "pages/add_dizhi/add_dizhi",
     "custom-tab-bar/index"
   ],
@@ -85,11 +70,6 @@
     "van-toast": "@vant/weapp/toast/index",
     "van-tabbar": "@vant/weapp/tabbar/index",
     "van-tabbar-item": "@vant/weapp/tabbar-item/index"
-  },
-  "permission": {
-    "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序定位"
-    }
   },
   "sitemapLocation": "sitemap.json"
 }

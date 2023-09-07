@@ -1,6 +1,6 @@
 <!--pages/dizhi/dizhi.wxml-->
 
-<block wx:if="{{list.length!=0}}" wx:for="{{list}}" wx:key="index">
+<block wx:if="{{list.length!==0}}" wx:for="{{list}}" wx:key="index">
       
       <view class="dizhi" bindtap="xuan" data-xuan="{{item}}">
         
@@ -41,7 +41,7 @@
 
 
 
-<block wx:if="{{list.length==0}}">
+<block wx:if="{{list.length===0}}">
   <van-empty description="空空如也" />
 </block>
 

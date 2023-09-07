@@ -36,19 +36,13 @@ Page({
         claimable_coupons: [],
         redeemable_coupons: [],
         due_coupons: [],
-
-
-        page: 0,
-        //中间值
-        cost: 0,
-        anniu_show: -1,          //做按钮显示限制，防止用户多次点击单个按钮
-        kejin: true,
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        app.check_locked();
         let that = this;
         that.ensure_user_exist();
         that.init_data();
@@ -62,13 +56,18 @@ Page({
                 // 用户不存在，先添加这个用户
                 db.collection('coupons').add({
                     data: {
-                        credits: 5000,
+                        credits: 5000, // 默认积分
                         coupons: []  // 初始化为空数组或者其他默认值
                     }
                 }).then(res => {
                     console.log('用户添加成功', res);
                     // 然后你可以在这里添加领取优惠券的逻辑，与上面的更新操作基本相同。
+                    Toast.success({
+                        message: '+5000积分',
+                        context: this,
+                    });
                 }).catch(err => {
+
                     console.log("添加的用户openid:", app.globalData.openid);
                     console.error('用户添加失败', err);
                 });
@@ -77,26 +76,26 @@ Page({
             console.log("查询的用户openid:", app.globalData.openid);
             console.error("查询用户失败", err);
         });
-        // 保证用户存在
     },
+    // 保证用户存在
     init_data: function () {
-        var credits;
+        console.log("init_data");
         let that = this;
+        let coupon_in_db;
         db.collection('coupons').where({
             _openid: app.globalData.openid,
         }).orderBy('creat', 'desc').limit(1).get({
             success: function (res) {
-                credits = res.data[0].credits;
-                console.log("coupons.res.data:", res.data);
-                console.log("coupons.res.data[0].credits:", credits);
-                app.globalData.credits = credits;
+                // 初始化用户积分
+                app.globalData.credits = res.data[0].credits;
+                coupon_in_db = res.data[0].coupons;
 
                 that.setData({
                     credits: app.globalData.credits
                 })
-                console.log("初始化claimable_coupons")
-
-
+                // console.log("coupons.res.data:", res.data);
+                // console.log("coupons.res.data[0].credits:", res.data[0].credits);
+                // 初始化claimable_coupons
                 let claimable_coupons = [];
                 // console.log("coupons_category:", that.data.coupons_category);
                 for (let i = 0; i < that.data.coupons_category.length; i++) {
@@ -111,33 +110,18 @@ Page({
                         claimable_coupons: claimable_coupons,
                     }
                 )
-                // console.log("credits:", that.data.credits);
                 // console.log("claimable_coupons:", that.data.claimable_coupons);
-
-                let old_redeemable_coupons = [];
+                // 从数据库中没有过期一个月的优惠券中筛选出可用和过期的
                 // 初始化redeemable_coupons,due_coupons
+                that.check_due(coupon_in_db);
 
-                db.collection('coupons').where({
-                    _openid: app.globalData.openid,
-                }).orderBy('creat', 'desc').limit(1).get({
-                    success: function (res) {
-                        old_redeemable_coupons = res.data[0].coupons;
-                        console.log("coupons.res.data:", res.data);
-                        console.log("coupons.res.data[0].coupons:", old_redeemable_coupons);
-                        that.check_due(old_redeemable_coupons);
-
-                    },
-                    fail(er) {
-                        console.log("查询失败：", er)
-                    }
-                })
             },
             fail(er) {
                 console.log("查询res.data[0].credits失败：", er)
             }
         })
-
     },
+
     // 检查优惠券是否过期
     check_due: function (redeemable_coupons) {
         console.log("check_due :", redeemable_coupons);
@@ -292,22 +276,9 @@ Page({
             tab: event.detail.title,
             page: 0,
         })
-        that.shuju();
 
     }
-    ,
 
-
-//获取更多数据
-    gengduo: function () {
-        let that = this;
-        if (that.data.nomore || that.data.list.length < 20) {
-            wx.showToast({
-                title: '没有更多了',
-            })
-            return false
-        }
-    }
     ,
     select_coupon: function (e) {
         if (e.currentTarget.dataset.coupon) {
@@ -337,6 +308,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
+        app.check_locked();
         if (typeof this.getTabBar === 'function' &&
             this.getTabBar()) {
             this.getTabBar().init()
@@ -366,11 +338,6 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh: function () {
-        let that = this;
-        that.setData({
-            anniu_show: -1,
-        })
-        that.shuju();
     }
     ,
 
@@ -378,11 +345,8 @@ Page({
      * 页面上拉触底事件的处理函数
      */
     onReachBottom: function () {
-        //触底了就触发gengduo函数，去获取更多数据
-        this.gengduo();
     }
     ,
-
     /**
      * 用户点击右上角分享
      */
