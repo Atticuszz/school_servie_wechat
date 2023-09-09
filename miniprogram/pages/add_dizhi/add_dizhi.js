@@ -9,12 +9,12 @@ Page({
   data: {
     dormitory:['成园1幢', '成园2幢', '成园3幢', '成园4幢', '成园5幢', '成园6幢', '桃园1幢', '桃园2幢', '桃园3幢', '桃园4幢', '桃园5幢', '桃园6幢', '桃园7幢', '桃园8幢', '桃园9幢', '桃园10幢', '桃园11幢', '桃园12幢', '桃园13幢', '桃园14幢', '桃园15幢', '桃园16幢', '桃园17幢', '桃园18幢'],
     dormitory_show:false,
-    choose_dormitory:'',
+    choose_dormitory:'成园1幢',
     name:'',
     phone:'',
     deliver_period:["中午",'晚上'],
     deliver_period_show:false,
-    choose_deliver_period:'',
+    choose_deliver_period:"中午",
     openid:""
   },
 

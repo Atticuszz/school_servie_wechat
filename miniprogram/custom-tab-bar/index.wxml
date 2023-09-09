@@ -1,5 +1,5 @@
-<van-tabbar active="{{ active }}" bind:change="onChange">
-  <van-tabbar-item wx:for="{{ list }}" wx:key="index" icon="{{ item.icon }}" >
+<van-tabbar active="{{ active }}" bind:change="onChange" safe-area-inset-bottom="{{true}}" placeholder="{{true}}">
+  <van-tabbar-item wx:for="{{ list }}" wx:key="index" icon="{{ item.icon }}"  dot="{{item.icon==='coupon-o'}}" placeholder="{{true}}">
     {{ item.text }}
   </van-tabbar-item>
 </van-tabbar>

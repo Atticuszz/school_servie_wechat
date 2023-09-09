@@ -1,5 +1,5 @@
 <!--pages/qu/qu.wxml-->
-
+<van-toast id="van-toast"/>
         <!-- 快递信息 -->
 <van-cell-group inset>
     <!-- 单元格 -->

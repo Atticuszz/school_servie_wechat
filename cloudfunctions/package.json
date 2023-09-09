@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "node-xlsx": "^0.23.0",
     "wx-server-sdk": "^2.6.3"
   }
 }

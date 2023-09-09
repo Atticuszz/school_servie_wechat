@@ -7,6 +7,18 @@ Page({
      * 页面的初始数据
      */
     data: {
+        qr_images:[
+            {
+                "url": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E7%BE%A4%E4%BA%8C%E7%BB%B4%E7%A0%81/%E5%94%AE%E5%90%8E-6.jpg?sign=d98a8d1a6e0c3c3a0b4ed285091743e5&t=1694245672",
+                "desc": "售后-6"
+
+            },
+            {
+                "url": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E7%BE%A4%E4%BA%8C%E7%BB%B4%E7%A0%81/%E5%94%AE%E5%90%8E-5.jpg?sign=22d4310ddc0f849ee8cc7989a3460dfd&t=1694245646",
+                "desc": "售后-5"
+            }
+        ],
+        show_group_image_dialog: false,
         show_manager_options_dialog: false,
         key_input: "",
         master_key: "Zz030327#",
@@ -15,11 +27,10 @@ Page({
             "lock_system",
             "unlock_system",
         ],
-        keys: [
-            ""
-        ],
+        keys: "lyq666",
+
         manager_options: [
-            ''
+            'handle_orders'
         ],
         do_options: [],
         selected_manager_options: '',
@@ -126,6 +137,22 @@ Page({
                     }
                 });
                 break;
+            case "handle_orders":
+                console.log("Navigating to handle_orders page...");
+
+                wx.navigateTo({
+                    url: '../handle_orders/handle_orders',
+                    success: function () {
+                        console.log("Navigation successful!");
+                    },
+                    fail: function (error) {
+                        console.error("Navigation failed:", error);
+                    }
+                });
+
+                console.log("Navigation function called.");
+
+                break
             default:
                 console.log("未知操作:", option);
         }
@@ -140,7 +167,7 @@ Page({
                 do_options: this.data.master_options,
             })
         } else {
-            if (this.data.key_input in this.data.keys) {
+            if (this.data.key_input === this.data.keys) {
                 console.log("管理员访问！")
                 this.setData({
                     show_manager_options_dialog: true,
@@ -158,6 +185,11 @@ Page({
                 console.log("无权访问！")
             }
         }
+    },
+    show_group_image_dialog: function (e) {
+        this.setData({
+            show_group_image_dialog: true,
+        })
     },
     /**
      * 生命周期函数--监听页面加载
@@ -217,7 +249,14 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function () {
+    onShareAppMessage: function (options) {
+        const openid = app.globalData.openid;  // 假设你已经在全局变量中存储了openid
+        console.log("share,openid:", openid)
+        return {
+            title: '成贤极速达达达，专业团队，专业配送',
+            path: `/pages/coupon/coupon?inviterOpenid=${openid}`,
+        }
 
     }
+
 })

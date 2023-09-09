@@ -2,6 +2,7 @@
 
 const app = getApp();
 const db = wx.cloud.database();
+import Toast from '@vant/weapp/toast/toast';
 
 Page({
 
@@ -15,8 +16,7 @@ Page({
 
         selected_site: null,  // 记录选中的快递站点
         express_site_index: -1,
-        delivery_sites: [   // 取件站点
-        ],
+        delivery_sites: app.globalData.express_site_list,
         selectedExpressSize: "",
         select_express_size_actions: [
             {
@@ -49,15 +49,10 @@ Page({
         pick_up_code: '',  //取件码或者快递单号
         remarks: '',  //用户评论
         final_cost: 999,
-        prices: [2, 4, 8, 12, 0],
+        prices: [2, 4, 8, 12, 999],
 
         // 地址信息
-        address: {
-            "delivery_period": '',
-            "recipient": '',
-            "dormitory": '',
-            "phone": ''
-        },
+        address: {},
 
         // 优惠券
         selected_coupon: null,
@@ -83,47 +78,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-        this.initDeliverySites();
-        let that = this;
-        if (options.id) {
-            wx.setNavigationBarTitle({
-                title: '代取快递'
-            })
-        }
-    },
-    // 初始化站点
-    initDeliverySites: function () {
-        const express_site_list = [
-            {
-                "desc": "中通,极兔,申通,京东,丹鸟",
-                "thumb": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%BF%AB%E9%80%92%E7%AB%99%E7%82%B9/%E8%8F%9C%E9%B8%9F%E9%A9%BF%E7%AB%99.jpg?sign=cd69487f3cbcc45c6a358ebbba5822e5&t=1693985078",
-                "title": "菜鸟驿站(校内)",
-                "express_site_index": 0
-            },
-            {
-                "desc": "顺丰,韵达,天猫: 泰来苑98幢",
-                "express_site_index": 1,
-                "thumb": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%BF%AB%E9%80%92%E7%AB%99%E7%82%B9/%E9%A9%BF%E6%94%B6%E5%8F%91%E9%A9%BF%E7%AB%99.png?sign=0014d18abfbd7e37217695e56a8507e3&t=1693985060",
-                "title": "驿收发驿站(校外)",
-            },
-            {
-                "desc": "圆通速递'",
-                "express_site_index": 2,
-                "thumb": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%BF%AB%E9%80%92%E7%AB%99%E7%82%B9/%E5%9C%86%E9%80%9A.png?sign=d1935afb29a8eaf2716d83dd29cec913&t=1693985018",
-                "title": "妈妈驿站(校外)",
-            },
-            {
-                "desc": "下午四点关门,快递柜24小时",
-                "express_site_index": 3,
-                "thumb": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%BF%AB%E9%80%92%E7%AB%99%E7%82%B9/%E9%82%AE%E6%94%BF.png?sign=3743dcba1ecdb0cad43fba9287ee6974&t=1693985037",
-                "title": "中国邮政(校内)",
-            }
-        ]
-        this.setData({
-            delivery_sites: express_site_list
-        });
 
-        console.log("delivery_sites:", this.data.delivery_sites)
     },
     // 加载个人地址
 
@@ -247,13 +202,26 @@ Page({
 
 // 检查对象的每一个属性是否为空
     isEmpty: function (obj) {
+        // 检查对象是否为null
+        if (obj === null || obj === undefined) return true;
+
+
+        // 检查对象是否为空（没有任何属性）
+        if (Object.keys(obj).length === 0) return true;
+
         for (let key in obj) {
-            if (obj[key] === '' || obj[key] === -1) {
+            if (obj[key] === '' || obj[key] === -1 || obj[key] === null) {
+                return true;
+            }
+
+            // 如果属性的值是一个对象，递归检查它是否为空
+            if (typeof obj[key] === 'object' && this.isEmpty(obj[key])) {
                 return true;
             }
         }
         return false;
     },
+
     ////////////////
     //检查各个输入是否都已经输入
     onSubmit: function () {
@@ -264,47 +232,91 @@ Page({
         // 检查地址字段
         console.log("地址:", this.data.address)
         if (this.isEmpty(this.data.address)) {
-            wx.showToast({
-                title: '收件信息是空的啊',
-                icon: 'none',
-                duration: 2000
-            });
+            // wx.showToast({
+            //     title: '收件信息是空的啊',
+            //     icon: 'none',
+            //     duration: 2000
+            // });
+            Toast.fail({
+                message: '收件信息是空的啊',
+                duration: 2500,
+                forbidClick: true,
+                context: that,
+            })
+            that.setData({
+                submit_loading: false
+            })
             return false;
+        } else {
+            console.log("地址:", this.data.address)
         }
         // 检查取件码是否为纯数字
         if (!this.isNumeric(this.data.pick_up_code)) {
-            wx.showToast({
-                title: '取件码应该是纯数字',
-                icon: 'none',
-                duration: 2000
-            });
+            // wx.showToast({
+            //     title: '取件码应该是纯数字',
+            //     icon: 'none',
+            //     duration: 2000
+            // });
+            Toast.fail({
+                message: '取件码应该是纯数字',
+                duration: 2500,
+                forbidClick: true,
+                context: that,
+            })
+            that.setData({
+                submit_loading: false
+            })
             return false;
         }
 
         // 检查快递大小
         if (this.data.express_size === -1) {
-            wx.showToast({
-                title: '快递规格忘了选吧',
-                icon: 'none',
-                duration: 2000
-            });
+            // wx.showToast({
+            //     title: '快递规格忘了选吧',
+            //     icon: 'none',
+            //     duration: 2000
+            // });
+            Toast.fail({
+                message: '快递规格忘了选吧',
+                duration: 2500,
+                forbidClick: true,
+                context: that,
+            })
+            that.setData({
+                submit_loading: false
+            })
             return false;
         }
         if (that.data.selected_site == null) {
-            wx.showToast({
-                title: '快递站点没告诉我',
-                icon: 'none',
-                duration: 2000
+            // wx.showToast({
+            //     title: '快递站点没告诉我',
+            //     icon: 'none',
+            //     duration: 2000
+            // })
+            Toast.fail({
+                message: '快递站点没告诉我',
+                duration: 2500,
+                forbidClick: true,
+                context: that,
+            })
+            that.setData({
+                submit_loading: false
             })
             return false;
         }
         if (this.data.final_cost === 0) {
-            wx.showToast({
-                title: '提交订单中...',
-                icon: 'loading',
-                duration: 10000 // 这里可以设置持续时间
+            // wx.showToast({
+            //     title: '提交订单中...',
+            //     icon: 'loading',
+            //     duration: 10000 // 这里可以设置持续时间
+            // });
+            Toast.loading({
+                message: '提交订单中...',
+                duration: 0,
+                mask: true,
+                context: that,
+                forbidClick: true,
             });
-
             this.add_order_form();
             console.log("0$,支付成功")
         } else {
@@ -319,11 +331,19 @@ Page({
                 submit_loading: false,
                 selected_coupon: null,
             })
-            wx.showToast({
-                title: '支付成功',
-                icon: 'success',
-                duration: 2000 // 持续时间为3秒
-            });
+            // wx.showToast({
+            //     title: '支付成功',
+            //     icon: 'success',
+            //     duration: 2000 // 持续时间为3秒
+            // });
+            Toast.success(
+                {
+                    message: '支付成功',
+                    duration: 3000,
+                    forbidClick: true,
+                    context: that
+                }
+            )
             that.refresh_data()
             return false;
         }
@@ -346,11 +366,18 @@ Page({
                 selected_coupon: null,
 
             })
-            wx.showToast({
-                title: '提交订单成功',
-                icon: 'success',
-                duration: 2000 // 持续时间为3秒
-            });
+            // wx.showToast({
+            //     title: '提交订单成功',
+            //     icon: 'success',
+            //     duration: 2000 // 持续时间为3秒
+            // });
+            Toast.success(
+                {
+                    message: '提交订单成功',
+                    duration: 3000, // 持续时间为3秒
+                    context: that
+                }
+            )
             that.refresh_data();
         }).catch(err => {
             console.error('删除失败', err);
@@ -409,8 +436,8 @@ Page({
     pay: function () {
         let that = this;
         let trade_no = Date.now().toString() + Math.floor(Math.random() * 1000).toString()
-        const totalFee = parseInt(that.data.final_cost*100);
-        console.log("totalFee",totalFee);
+        const totalFee = parseInt(that.data.final_cost * 100);
+        console.log("totalFee", totalFee);
         wx.cloud.callFunction({
             name: 'pay',  //云函数的名称，在后面我们会教大家怎么建
             data: {
@@ -444,11 +471,17 @@ Page({
                             },
                             success: function (res) {
                                 console.log("successfully called wx.paysuc,res:", res)
-                                wx.showToast({
-                                    title: '提交订单中...',
-                                    icon: 'loading',
-                                    duration: 10000 // 这里可以设置持续时间
-                                });
+                                // wx.showToast({
+                                //     title: '提交订单中...',
+                                //     icon: 'loading',
+                                //     duration: 10000 // 这里可以设置持续时间
+                                // });
+                                Toast.loading({
+                                    duration: 0, // 持续展示 toast
+                                    forbidClick: true,
+                                    message: '提交订单中...',
+                                    mask: true,
+                                })
 
                                 that.add_order_form();
                                 console.log("支付成功:" + this.data.final_cost + $)
@@ -469,12 +502,16 @@ Page({
 
                     },
                     fail(err) {
-                        wx.showToast({
-                            title: '支付失败, err:' + err.errMsg,
-                            icon: 'none',
-                            duration: 4500 // 持续时间为3秒
-                        });
-
+                        // wx.showToast({
+                        //     title: '支付失败, err:' + err.errMsg,
+                        //     icon: 'none',
+                        //     duration: 4500 // 持续时间为3秒
+                        // });
+                        Toast.fail({
+                            duration: 4500,
+                            message: '咋取消了订单',
+                            context: that,
+                        })
                         that.setData({
                             submit_loading: false
                         })
@@ -525,6 +562,7 @@ Page({
     add_order_form: function (e) {
         console.log("开始提交表单到数据库")
         let that = this;
+
         // 用于订单记录，骑手查看
         db.collection('order_form').add({
             data: {
@@ -532,7 +570,7 @@ Page({
                 category: 'pick_up',
                 // 快递站点
                 selected_site: that.data.selected_site.title,
-                express_site_index: that.data.express_site_index,
+                express_site_index: that.data.selected_site.express_site_index,
                 // 取件信息
                 delivery_period: that.data.address.delivery_period,
                 recipient: that.data.address.name,
@@ -544,6 +582,7 @@ Page({
                 remarks: that.data.remarks,
                 // 订单状态
                 order_state: false,
+                delivery_time: "None",
                 // 金额
                 cost: that.data.final_cost,
                 // 订单创建时间
@@ -567,6 +606,12 @@ Page({
 
     },
     refresh_data: function () {
+        Toast.loading({
+            duration: 1000,
+            forbidClick: true,
+            message: '刷新中...',
+            mask: true
+        })
         console.log("refresh_data is called")
         const index = app.globalData.selectedExpressSizeIndex;
         let final_cost = 999;
@@ -584,7 +629,7 @@ Page({
             final_cost,
             selected_coupon: app.globalData.coupon,
             pick_up_code: app.globalData.pick_up_code,
-            address: app.globalData.dizhi,
+            address: app.globalData.address,
             express_site_index: app.globalData.selected_site_index,
             selectedExpressSize: app.globalData.selectedExpressSize,
             express_size: index,
@@ -598,6 +643,7 @@ Page({
         console.log("address=", this.data.address);
         console.log("selectedExpressSize=", this.data.selectedExpressSize);
         console.log("express_size=", this.data.express_size);
+
     },
     /**
      * 生命周期函数--监听页面初次渲染完成

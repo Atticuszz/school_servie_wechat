@@ -16,7 +16,7 @@
 </view>
         <!--单元格-->
 <van-grid style="margin-top: 80rpx;" center border square column-num="3" gutter="{{1}}" clickable="{{true}}"
-          bind:tab="handleGridClick">
+>
     <van-grid-item
             wx:for="{{gridItems}}"
             wx:key="index"
@@ -108,16 +108,41 @@
 
     <van-cell clickable="{{true}}"
               is-link="{{true}}"
-              value="反馈bug大大滴有赏"
-              title="反馈" icon="bulb-o"/>
+              label="送达售后群二维码点击弹出，群里有口令首次加群领积分！还有小程序使用的秘籍"
+              value=""
+              title="反馈" icon="bulb-o" bind:click="show_group_image_dialog"/>
+    <van-dialog show="{{ show_group_image_dialog }}"
+                use-slot
+                width="350px"
+                showCancelButton="{{true}}"
+                showConfirmButton="{{false}}"
+                theme="round-button"
+                title="售后群">
+
+            <block wx:for="{{ qr_images }}" wx:key="index">
+                <image src="{{item.url}}" show-menu-by-longpress="{{true}}" mode="aspectFit"></image>
+
+<!--                <text style="text-align: center; color: #333; font-size: 14px; margin-top: 5px;">{{item.desc}}</text>-->
+            </block>
+
+
+    </van-dialog>
     <!--  分割线   -->
     <view style="height: 2px;"></view>
     <!--    邀请码-->
     <van-cell clickable="{{true}}"
-              is-link="{{true}}"
-              title="邀请码"
-              value="券券无极限"
-              icon="friends-o"/>
+              is-link="{{false}}"
+              title="邀请好友"
+              icon="friends-o"
+              custom-style="position: relative;">
+        <!-- 插槽内容 -->
+        <van-button open-type="share"
+                    plain
+                    custom-style="background-color: transparent; border: none; position: absolute; right: 1px; top: 50%; transform: translateY(-50%);">
+            <van-icon name="arrow" size="16px" color="#969799"/>
+        </van-button>
+    </van-cell>
+
     <!--  分割线   -->
     <view style="height: 2px;"></view>
     <van-cell title="关于"

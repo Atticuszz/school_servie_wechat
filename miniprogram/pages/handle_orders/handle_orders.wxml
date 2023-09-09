@@ -1,0 +1,55 @@
+<van-cell title="添加测试数据">
+    <!-- 使用 named slot 插入自定义内容 -->
+    <view slot="right-icon" style="display: flex;">
+        <van-button type="primary" size="small" style="margin-right: 10rpx;" bind:tap="create_test_orders">随机生成</van-button>
+        <van-button type="info" size="small" bind:tap="clean_orders">清空订单</van-button>
+    </view>
+</van-cell>
+<van-cell title="拉取当天配送任务">
+    <!-- 使用 named slot 插入自定义内容 -->
+    <view slot="right-icon" style="display: flex;">
+        <van-button type="primary" size="small" style="margin-right: 10rpx;" bind:click="fetch_orders" data-slot="0">中午</van-button>
+        <van-button type="info" size="small" bind:click="fetch_orders" data-slot="1">晚上</van-button>
+    </view>
+</van-cell>
+<block wx:for="{{orders}}" wx:key="index">
+    <van-cell title="{{item.delivery_time}}">
+        <!-- 使用 named slot 插入自定义内容 -->
+        <view slot="right-icon" style="display: flex;">
+            <van-button type="primary" size="small" style="margin-right: 10rpx;" bind:click="export_orders" data-delivery_time="{{item.delivery_time}}">导出excel</van-button>
+            <van-button type="info" size="small" bind:tap="show_notification_dialog" data-delivery_info ="{{item}}">通知送达</van-button>
+        </view>
+    </van-cell>
+</block>
+<van-dialog show="{{ show_notification_dialog }}"
+                use-slot
+                width="350px"
+                showCancelButton="{{true}}"
+                showConfirmButton="{{false}}"
+                theme="round-button"
+                title="确认送达">
+        <van-cell-group inset wx:for="{{dormitory_info}}"
+                      wx:key="index"
+        >
+            <van-cell clickable
+                      bindtap="handleCellTap"
+
+                      title="{{item.dormitory}}"
+                      data-dormitory="{{item.dormitory}}"
+                      use-label-slot="{{true}}"
+            >
+            <view slot="label">
+                <van-icon wx:if="{{item.order_state}}" name="success" color="green" size="40px" style="margin-top:20rpx"/>
+
+                <van-icon wx:else name="cross" size="40px" style="margin-top:20rpx" color="red"/>
+            </view>
+                <!-- 右侧内容 -->
+                <view slot="right-icon">
+                    <van-icon name="certificate" size="25px" style="margin-top:20rpx"/>
+                </view>
+
+
+            </van-cell>
+
+        </van-cell-group>
+    </van-dialog>

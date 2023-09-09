@@ -45,7 +45,7 @@ Page({
   xuan:function(event){
     let that = this;
     console.log("xuan:",event.currentTarget.dataset.xuan)
-    app.globalData.dizhi = event.currentTarget.dataset.xuan
+    app.globalData.address = event.currentTarget.dataset.xuan
     wx.navigateBack({
       delta: 0,
     })

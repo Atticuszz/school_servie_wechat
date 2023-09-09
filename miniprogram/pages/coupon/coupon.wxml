@@ -2,53 +2,12 @@
 
         <!-- 这里是你的其他 WXML 代码 -->
 <van-toast id="van-toast"/>
-
+<van-notice-bar
+        left-icon="volume-o"
+        text="新用户自动赠送+5000积分,邀请好友即得+2888积分~,邀请无上限！"
+/>
 <van-tabs animated sticky>
-    <van-tab title="可用">
-        <block wx:for="{{ redeemable_coupons }}" wx:key="index">
-            <view style="height: 5px;"></view>
 
-            <van-cell-group inset>
-
-                <van-cell custom-class="custom-cell">
-
-                    <view slot="icon" class="coupon-container">
-                        <image src="{{imageUrl.coupon}}"
-                               class="coupon-image"/>
-                    </view>
-
-                    <view class="coupon-details">
-                        <view class="title-strength-button-container">
-                            <view class="tag-and-date">
-                                <text class="expire-date">{{item.due_time}} 前可用</text> <!-- 这里是截止日期 -->
-                                <van-tag color="#ff8800" plain type="big" custom-class="coupon-tag">{{item.name}}
-                                </van-tag>
-                            </view>
-                            <text class="coupon-strength-left">满0.0￥</text>
-                            <text class="coupon-strength-right">{{item.discount * 100}}%</text>
-                        </view>
-                    </view>
-                    <view style="margin-top:40rpx;">
-                        <van-button
-                                plain
-                                round
-                                block
-                                data-coupon="{{item}}"
-                                bind:click="select_coupon"
-                                size="mini"
-                                type="primary"
-                        >
-                            立刻下单
-                        </van-button>
-                    </view>
-                </van-cell>
-
-            </van-cell-group>
-        </block>
-        <block wx:if="{{redeemable_coupons.length===0}}">
-            <van-empty description="空空如也"/>
-        </block>
-    </van-tab>
     <van-tab title="可领">
         <van-cell-group inset>
             <view style="height: 5px;"></view>
@@ -98,6 +57,54 @@
 
             </van-cell-group>
         </block>
+        <block wx:if="{{claimable_coupons.length===0}}">
+            <van-empty description="空空如也"/>
+        </block>
+    </van-tab>
+    <van-tab title="可用">
+        <block wx:for="{{ redeemable_coupons }}" wx:key="index">
+            <view style="height: 5px;"></view>
+
+            <van-cell-group inset>
+
+                <van-cell custom-class="custom-cell">
+
+                    <view slot="icon" class="coupon-container">
+                        <image src="{{imageUrl.coupon}}"
+                               class="coupon-image"/>
+                    </view>
+
+                    <view class="coupon-details">
+                        <view class="title-strength-button-container">
+                            <view class="tag-and-date">
+                                <text class="expire-date">{{item.due_time}} 前可用</text> <!-- 这里是截止日期 -->
+                                <van-tag color="#ff8800" plain type="big" custom-class="coupon-tag">{{item.name}}
+                                </van-tag>
+                            </view>
+                            <text class="coupon-strength-left">满0.0￥</text>
+                            <text class="coupon-strength-right">{{item.discount * 100}}%</text>
+                        </view>
+                    </view>
+                    <view style="margin-top:40rpx;">
+                        <van-button
+                                plain
+                                round
+                                block
+                                data-coupon="{{item}}"
+                                bind:click="select_coupon"
+                                size="mini"
+                                type="primary"
+                        >
+                            立刻下单
+                        </van-button>
+                    </view>
+                </van-cell>
+
+            </van-cell-group>
+        </block>
+        <block wx:if="{{redeemable_coupons.length===0}}">
+            <van-empty description="空空如也"/>
+        </block>
     </van-tab>
     <van-tab title="失效">
         <block wx:for="{{ due_coupons }}" wx:key="index">
@@ -142,23 +149,23 @@
             <van-empty description="空空如也"/>
         </block>
     </van-tab>
-
     <van-tab title="口令">
         <van-cell-group inset>
 
             <van-field
-                    value="{{ sms }}"
+                    value="{{ password }}"
                     center
                     clearable
                     label="券码"
-                    placeholder="邀请码或者活动口令"
+                    placeholder="活动口令"
                     border="{{ false }}"
                     use-button-slot
+                    bind:change="on_password_change"
             >
 
             </van-field>
             <van-cell style="width:20rpx">
-                <van-button size="mini" type="primary">
+                <van-button size="mini" type="primary" >
                     领取积分
                 </van-button>
             </van-cell>

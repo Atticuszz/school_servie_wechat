@@ -3,12 +3,14 @@ const app = getApp();
 const db = wx.cloud.database();
 import Toast from '@vant/weapp/toast/toast';
 
+const _ = db.command;
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
+        password: '',
         imageUrl: {
             'coupon': "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%9B%BE%E6%A0%87/coupon2.jpg?sign=eb17a87f619374daa89e6f18d8402e08&t=1693986436"
         },
@@ -43,11 +45,86 @@ Page({
      */
     onLoad: function (options) {
         app.check_locked();
+        app.globalData.inviterOpenid = options.inviterOpenid;
+        console.log("inviterOpenid:", options.inviterOpenid);  // 输出: 123456
+        this.ensure_user_exist();
+
+    },
+    check_share: function () {
         let that = this;
-        that.ensure_user_exist();
-        that.init_data();
+        const currentUserOpenid = app.globalData.openid;
+        const inviterOpenid = app.globalData.inviterOpenid;
+        if (!inviterOpenid) {
+            console.log("[DEBUG] - No inviterOpenid");
+            return;
+        }
+        if (currentUserOpenid === inviterOpenid) {
+            console.log("[DEBUG] - InviterOpenid is currentUserOpenid");
+            return;
+        }
+        // 查询当前用户的if_invited字段
+        db.collection('coupons').where({
+            _openid: currentUserOpenid
+        }).get().then(res => {
+            console.log("[DEBUG] - Coupons collection currentUserOpenid query result:", res);
+            const if_invited = res.data[0].if_invited;
+
+            console.log("[DEBUG] - Current user if_invited status:", if_invited);
+
+            if (!if_invited) {
+                // 查询coupon集合中是否存在与inviterOpenid匹配的记录
+                db.collection('coupons').where({
+                    _openid: inviterOpenid
+                }).get().then(res => {
+                    if (res.data.length) {
+                        console.log("[DEBUG] - Found matching inviterOpenid in coupon collection");
+
+                        // 为邀请者添加积分
+                        db.collection('coupons').where({
+                            _openid: inviterOpenid
+                        }).update({
+                            data: {
+                                credits: _.inc(2888)
+                            }
+                        }).then(updateResult => {
+                            console.log("[DEBUG] - Added credits to inviter:", updateResult.stats.updated);
+
+                            // 为当前用户添加积分并将if_invited设置为true
+                            db.collection('coupons').where({
+                                _openid: currentUserOpenid
+                            }).update({
+                                data: {
+                                    credits: _.inc(2888),
+                                    if_invited: true
+                                }
+                            }).then(updateResult => {
+                                console.log("[DEBUG] - Added points to current user:", updateResult.stats.updated);
+                                Toast.success({
+                                    message: '被邀请+2888积分',
+                                    context: that,
+                                    duration: 3000,
+                                });
+                            }).catch(err => {
+                                console.error("[DEBUG - ERROR] - Error while updating current user:", err);
+                            });
+                        }).catch(err => {
+                            console.error("[DEBUG - ERROR] - Error while updating inviter:", err);
+                        });
+                    } else {
+                        console.log("[DEBUG] - No matching inviterOpenid found in coupon collection");
+                    }
+                }).catch(err => {
+                    console.error("[DEBUG - ERROR] - Error during coupon collection query:", err);
+                });
+            } else {
+                console.log("[DEBUG] - Current user already invited");
+            }
+        }).catch(err => {
+            console.error("[DEBUG - ERROR] - Error during user data retrieval:", err);
+        });
     },
     ensure_user_exist: function () {
+        let that = this;
         // 先检查是否有这个用户（通过 _openid）
         db.collection('coupons').where({
             _openid: app.globalData.openid
@@ -57,20 +134,27 @@ Page({
                 db.collection('coupons').add({
                     data: {
                         credits: 5000, // 默认积分
-                        coupons: []  // 初始化为空数组或者其他默认值
+                        coupons: [], // 初始化为空数组或者其他默认值
+                        if_invited: false // 默认未邀请过
                     }
                 }).then(res => {
                     console.log('用户添加成功', res);
                     // 然后你可以在这里添加领取优惠券的逻辑，与上面的更新操作基本相同。
                     Toast.success({
                         message: '+5000积分',
-                        context: this,
+                        context: that,
+                        duration: 3000,
                     });
+                    that.check_share();
+                    that.init_data();
                 }).catch(err => {
 
                     console.log("添加的用户openid:", app.globalData.openid);
                     console.error('用户添加失败', err);
                 });
+            } else {
+                that.check_share();
+                that.init_data();
             }
         }).catch(err => {
             console.log("查询的用户openid:", app.globalData.openid);
@@ -81,6 +165,12 @@ Page({
     init_data: function () {
         console.log("init_data");
         let that = this;
+        Toast.loading({
+            message: '加载券中...',
+            forbidClick: true,
+            duration: 0,  // 持续显示 toast
+            context: that,
+        });
         let coupon_in_db;
         db.collection('coupons').where({
             _openid: app.globalData.openid,
@@ -114,6 +204,11 @@ Page({
                 // 从数据库中没有过期一个月的优惠券中筛选出可用和过期的
                 // 初始化redeemable_coupons,due_coupons
                 that.check_due(coupon_in_db);
+                Toast.success({
+                    message: '加载成功！',
+                    context: that,
+                    duration: 1000,
+                });
 
             },
             fail(er) {
@@ -313,8 +408,8 @@ Page({
             this.getTabBar()) {
             this.getTabBar().init()
         }
-        this.ensure_user_exist();
-        this.init_data();
+        // this.ensure_user_exist();
+
     }
     ,
 
@@ -338,6 +433,8 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh: function () {
+        this.ensure_user_exist();
+        wx.stopPullDownRefresh();
     }
     ,
 

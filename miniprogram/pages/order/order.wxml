@@ -1,5 +1,27 @@
 <!--pages/fabu/coupon.wxml-->
-<wxs src="../../common.wxs" module="morejs" />
+<van-toast id="van-toast" />
+<van-notice-bar
+        left-icon="volume-o"
+        text="默认只显示最近20条记录，点击搜索栏小飞机图标拉取所有。有问题客服在等你~"
+/>
+<van-search
+  shape="round"
+  value="{{ search_value }}"
+  placeholder="请输入取件码(纯数字)或者日期(2023-3-#)搜索"
+  background="#4fc08d"
+  clearable="{{ true }}"
+  clear-trigger="always"
+  right-icon="loading"
+  show-action
+  action-text=""
+  use-right-icon-slot
+  bind:change="on_search_change"
+>
+    <view slot="right-icon" >
+        <van-icon name="guide-o" bind:click="get_all_orders" />
+    </view>
+</van-search>
+
 
     <block wx:if="{{orders.length!==0}}" wx:for="{{orders}}" wx:key="index">
               <!--帮我买-->
@@ -7,11 +29,10 @@
                <!-- 状态条 -->
                 <van-steps steps="{{ state_steps }}" active="{{item.order_state_step}}" direction="horizontal"></van-steps>
               <!-- 分割条 -->
-              <view style="height: 3px;"></view>
+              <view style="height: 2px;"></view>
               <!-- 商品信息 -->
               <van-call>
                 <van-card
-                class="my-card"
                 thumb-mode="aspectFill"
                 thumb="{{ item.thumb }}"
 
@@ -34,7 +55,7 @@
               </van-card>
               </van-call>
               <!-- 分割条 -->
-              <view style="height: 3px;"></view>
+              <view style="height: 2px;"></view>
               <!-- 取件码 -->
               <van-cell 
                 title="取件码" 
@@ -43,7 +64,7 @@
                 value-style="color:; font-size: 24px;" 
               />
               <!-- 分割条 -->
-              <view style="height: 3px;"></view>
+              <view style="height: 1px;"></view>
 
               
               <!-- 收件人信息 -->
@@ -51,7 +72,7 @@
                title="收件信息" 
                value="{{item.address.recipient + ' ' + item.address.dormitory + ' ' + item.address.phone}}" />
               <!-- 分割条 -->
-              <view style="height: 3px;"></view>
+              <view style="height: 1px;"></view>
 
               <!-- 单号和日期 -->
               <van-cell title="订单日期" value="{{ item.created_time }}" />

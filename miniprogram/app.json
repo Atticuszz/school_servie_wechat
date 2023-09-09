@@ -9,6 +9,7 @@
     "pages/recharge/recharge",
     "pages/qu/qu",
     "pages/add_dizhi/add_dizhi",
+    "pages/handle_orders/handle_orders",
     "custom-tab-bar/index"
   ],
   "window": {
