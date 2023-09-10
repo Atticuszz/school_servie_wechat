@@ -606,12 +606,7 @@ Page({
 
     },
     refresh_data: function () {
-        Toast.loading({
-            duration: 1000,
-            forbidClick: true,
-            message: '刷新中...',
-            mask: true
-        })
+
         console.log("refresh_data is called")
         const index = app.globalData.selectedExpressSizeIndex;
         let final_cost = 999;

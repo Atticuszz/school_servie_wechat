@@ -16,7 +16,7 @@ const fetchAllDataForDay = (deliveryTime, fetchedDataForDay = [], skip = 0) => {
                 fetchedDataForDay = fetchedDataForDay.concat(data);
 
                 // 如果拉取的数据数量为20，可能还有更多数据，继续拉取
-                if (data.length === 20) {
+                if (data.length === 20 && data.length>0) {
                     resolve(fetchAllDataForDay(deliveryTime, fetchedDataForDay, skip + 20));
                 } else {
                     resolve(fetchedDataForDay);
