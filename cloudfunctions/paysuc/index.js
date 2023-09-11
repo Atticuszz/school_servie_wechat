@@ -4,33 +4,39 @@ cloud.init({
 })
 
 exports.main = async (event, context) => {
-  const {cashFee,subOpenid,outTradeNo,timeEnd} = event
   try {
     const result = await cloud.openapi.subscribeMessage.send({
       touser: cloud.getWXContext().OPENID,
-      page: 'index',
-      templateId: "填入您申请的订阅消息templateId",
+      page: '/pages/order/order',
+      templateId: "LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM",
       data: {
-        "thing2": {
-          "value": event.trade_name
+        "thing3": {
+          "value":  event.customer_name
         },
-        "amount3": {
-          "value": event.cost +'元'
+        "time6": {
+          "value": event.deal_time
         },
-        "phrase4": {
-          "value": event.payment_method
+        "character_string5": {
+          "value": event.trade_no
         },
-        "date5": {
-          "value": event.time
+        "thing1": {
+          "value": event.goods
         },
-        "character_string6": {
-          "value": event.dingdan_hao
+        "amount2": {
+          "value": event.cost+"元"
         }
-    }
-    })
-    return result
+      }
+    });
+    console.log("cloud.openapi.subscribeMessage.send,result:",result);
+    return {
+      success: true,
+      data: result
+    };
   } catch (err) {
-    console.log(err)
-    return err
+    console.log("cloud.openapi.subscribeMessage.send,err:",err);
+    return {
+      success: false,
+      error: err
+    };
   }
-}
+};

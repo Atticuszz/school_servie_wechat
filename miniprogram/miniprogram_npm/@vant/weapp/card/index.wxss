@@ -60,7 +60,7 @@
 }
 
 .van-card__desc {
-    color: var(--card-desc-color, #ffffff);
+    color: var(--card-desc-color, #a6a3a3);
     line-height: var(--card-desc-line-height, 20px)
 }
 

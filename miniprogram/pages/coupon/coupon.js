@@ -54,7 +54,7 @@ Page({
         let that = this;
         const currentUserOpenid = app.globalData.openid;
         const inviterOpenid = app.globalData.inviterOpenid;
-        if (!inviterOpenid) {
+        if (!inviterOpenid || inviterOpenid==="undefined") {
             console.log("[DEBUG] - No inviterOpenid");
             return;
         }
@@ -62,6 +62,7 @@ Page({
             console.log("[DEBUG] - InviterOpenid is currentUserOpenid");
             return;
         }
+        console.log("[DEBUG] - InviterOpenid:", inviterOpenid);
         // 查询当前用户的if_invited字段
         db.collection('coupons').where({
             _openid: currentUserOpenid
@@ -408,7 +409,7 @@ Page({
             this.getTabBar()) {
             this.getTabBar().init()
         }
-        // this.ensure_user_exist();
+        this.ensure_user_exist();
 
     }
     ,

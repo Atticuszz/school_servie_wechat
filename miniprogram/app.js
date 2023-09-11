@@ -52,7 +52,7 @@ App({
                 "title": "驿收发驿站(校外)",
             },
             {
-                "desc": "圆通速递'",
+                "desc": "圆通速递",
                 "express_site_index": 3,
                 "thumb": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%BF%AB%E9%80%92%E7%AB%99%E7%82%B9/%E5%9C%86%E9%80%9A2.png?sign=c3afd8308b55193c58e8a667ec8dc2b3&t=1694407742",
                 "title": "妈妈驿站(校外)",

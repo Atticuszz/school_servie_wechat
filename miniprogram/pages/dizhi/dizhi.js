@@ -46,9 +46,11 @@ Page({
     let that = this;
     console.log("xuan:",event.currentTarget.dataset.xuan)
     app.globalData.address = event.currentTarget.dataset.xuan
-    wx.navigateBack({
-      delta: 0,
-    })
+    wx.navigateTo(
+        {
+            url: '/pages/qu/qu',
+        }
+    )
   },
   // 获取地址
   get_dizhi:function(){

@@ -305,19 +305,33 @@ Page({
             return false;
         }
         if (this.data.final_cost === 0) {
-            // wx.showToast({
-            //     title: '提交订单中...',
-            //     icon: 'loading',
-            //     duration: 10000 // 这里可以设置持续时间
-            // });
-            Toast.loading({
-                message: '提交订单中...',
-                duration: 0,
-                mask: true,
-                context: that,
-                forbidClick: true,
+            let trade_no = Date.now().toString() + Math.floor(Math.random() * 1000).toString()
+            this.add_order_form(trade_no);
+            wx.requestSubscribeMessage({
+                tmplIds: ["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM", "qAVo5ed6_mwB4D1WYVaI7xULItzxOUR8_-P5v_bgleg"],
+                success(res) {
+                    if (res["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM"] === 'accept') {
+                        // 发送支付成功的订阅消息
+                        that.sendPaySuccessNotification(trade_no);
+                        console.log("用户同意了支付成功订阅消息");
+                    }
+
+                    if (res["qAVo5ed6_mwB4D1WYVaI7xULItzxOUR8_-P5v_bgleg"] === 'accept') {
+                        // 发送订单送达的订阅消息
+                        // 如果你想立即发送，可以在这里调用发送函数
+                        // 或者你可以在适当的时机发送该消息
+                        console.log("用户同意送达通知 了订阅消息");
+                    }
+                },
+                fail(err) {
+                    console.error("Failed to request permission:", err);
+                    Toast.fail({
+                        duration: 4500,
+                        message: '订阅授权失败',
+                        context: that,
+                    })
+                }
             });
-            this.add_order_form();
             console.log("0$,支付成功")
         } else {
             this.pay();
@@ -452,61 +466,39 @@ Page({
                     ...payment,           //...这三点是 ES6的展开运算符，用于对变量、数组、字符串、对象等都可以进行解构赋值。
                     success(res) {
                         console.log('successfully called wx.requestPayment,res', res)
+                        console.log("支付成功:" + that.data.final_cost + "$");
+                        // 请求订阅消息权限
+                        wx.requestSubscribeMessage({
+                            tmplIds: ["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM", "qAVo5ed6_mwB4D1WYVaI7xULItzxOUR8_-P5v_bgleg"],
+                            success(res) {
+                                if (res["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM"] === 'accept') {
+                                    // 发送支付成功的订阅消息
+                                    that.sendPaySuccessNotification(trade_no);
+                                    console.log("用户同意了支付成功订阅消息");
+                                }
 
-                        let fullYear = new Date().getFullYear();
-                        let month = new Date().getMonth() + 1;
-                        let date = new Date().getDate();
-                        let hours = new Date().getHours();
-                        let minutes = new Date().getMinutes();
-                        //支付成功后，调用paysuc云函数发布订单支付成功提醒
-                        wx.cloud.callFunction({
-                            name: 'paysuc',
-                            data: {
-                                trade_name: '代取快递',
-                                cost: (that.data.cost).toString(),   //转成字符串
-                                payment_method: '微信支付',
-                                time: fullYear + '年' + month + '月' + date + '日' + ' ' + hours + ':' + minutes,
-                                dingdan_hao: trade_no,
-
+                                if (res["qAVo5ed6_mwB4D1WYVaI7xULItzxOUR8_-P5v_bgleg"] === 'accept') {
+                                    // 发送订单送达的订阅消息
+                                    // 如果你想立即发送，可以在这里调用发送函数
+                                    // 或者你可以在适当的时机发送该消息
+                                    console.log("用户同意送达通知 了订阅消息");
+                                }
                             },
-                            success: function (res) {
-                                console.log("successfully called wx.paysuc,res:", res)
-                                // wx.showToast({
-                                //     title: '提交订单中...',
-                                //     icon: 'loading',
-                                //     duration: 10000 // 这里可以设置持续时间
-                                // });
-                                Toast.loading({
-                                    duration: 0, // 持续展示 toast
-                                    forbidClick: true,
-                                    message: '提交订单中...',
-                                    mask: true,
+                            fail(err) {
+                                console.error("Failed to request permission:", err);
+                                Toast.fail({
+                                    duration: 4500,
+                                    message: '订阅授权失败',
+                                    context: that,
                                 })
-
-                                that.add_order_form();
-                                console.log("支付成功:" + this.data.final_cost + $)
-                            },
-                            fail(e) {
-                                wx.showToast({
-                                    title: '支付失败, err: failed called wx.paysuc',
-                                    icon: 'none',
-                                    duration: 4500 // 持续时间为3秒
-                                });
-
-                                that.setData({
-                                    submit_loading: false
-                                })
-                                console.log("failed called wx.paysuc,err:", e)
                             }
-                        })
+                        });
+
+                        //支付成功之后才能提交表单
+                        that.add_order_form(trade_no);
 
                     },
                     fail(err) {
-                        // wx.showToast({
-                        //     title: '支付失败, err:' + err.errMsg,
-                        //     icon: 'none',
-                        //     duration: 4500 // 持续时间为3秒
-                        // });
                         Toast.fail({
                             duration: 4500,
                             message: '咋取消了订单',
@@ -516,7 +508,6 @@ Page({
                             submit_loading: false
                         })
                         console.error('failed called wx.requestPayment,err', err)
-                        //支付失败之后的处理函数，写在这后面
                     }
                 })
             },
@@ -534,35 +525,78 @@ Page({
             }
         })
     },
+    sendPaySuccessNotification: function (trade_no) {
+        let that = this;
+        let fullYear = new Date().getFullYear();
+        let month = new Date().getMonth() + 1;
+        let date = new Date().getDate();
+        let hours = new Date().getHours();
+        let minutes = new Date().getMinutes();
+        const cost = (that.data.final_cost).toString();
+        const customer_name = that.data.address.name;
+        const goods = "取件码：" + that.data.pick_up_code;
+        console.log("customer_name:", customer_name);
+        console.log("cost:", cost);
+
+        wx.cloud.callFunction({
+            name: 'paysuc',
+            data: {
+                cost: cost,
+                deal_time: fullYear + '-' + month + '-' + date + ' ' + hours + ':' + minutes,
+                trade_no: trade_no,
+                goods: goods,
+                customer_name: customer_name,
+            },
+            success: function (res) {
+                if (res.result.success) {
+                    console.log("successfully called wx.paysuc, res:", res);
+                    console.log("支付成功的订阅消息推送成功");
+                } else {
+                    console.error("Unexpected error:", res.result.error);
+                    wx.showToast({
+                        title: '支付成功的订阅消息推送失败',
+                        icon: 'none',
+                        duration: 4500
+                    });
+                }
+            },
+            fail(e) {
+                console.error("Failed to call wx.paysuc, err:", e);
+                wx.showToast({
+                    title: '推送失败, err: failed called wx.paysuc',
+                    icon: 'none',
+                    duration: 4500
+                });
+            }
+        });
+    },
     //请求获取发送订阅消息的权限
     subscribeMessage() {
         let that = this;
         wx.requestSubscribeMessage({
-            tmplIds: [
-                "HtZ_mS0WpFwT8AQAE72xrDKFWWoIle5OzJ83VYfwu5E",//订阅消息模板ID，一次可以写三个，可以是同款通知、到货通知、新品上新通知等，通常用户不会拒绝，多写几个就能获取更多授权
-            ],
+            tmplIds: ["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM"],
             success(res) {
-                console.log("订阅消息API调用成功：", res)
-                if (!that.data.no_jisuan) {
-                    //使用钱包支付，先获取线路和计算距离，再调用parse_pay函数
-                    that.get_xianlu();
+                if (res["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM"] === 'accept') {
+                    that.sendPaySuccessNotification();
+                } else {
+                    console.error("User denied permission");
                 }
-                if (that.data.no_jisuan) {
-                    that.pay();
-                }
-
-
             },
-            fail(res) {
-                console.log("订阅消息API调用失败：", res)
+            fail(err) {
+                console.error("Failed to request permission:", err);
             }
-        })
+        });
     },
     //把输入的信息提交到publish数据库表
-    add_order_form: function (e) {
+    add_order_form: function (trade_no) {
         console.log("开始提交表单到数据库")
         let that = this;
-
+        Toast.loading({
+            duration: 0,
+            forbidClick: true,
+            message: '提交订单中...',
+            mask: true,
+        });
         // 用于订单记录，骑手查看
         db.collection('order_form').add({
             data: {
@@ -583,6 +617,7 @@ Page({
                 // 订单状态
                 order_state: false,
                 delivery_time: "None",
+                trade_no: trade_no,
                 // 金额
                 cost: that.data.final_cost,
                 // 订单创建时间

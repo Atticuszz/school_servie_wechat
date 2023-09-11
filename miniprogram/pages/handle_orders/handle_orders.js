@@ -1,6 +1,17 @@
 // pages/handle_orders/handle_orders.js
 const db = wx.cloud.database();
 const app = getApp();
+function formatUnixTime(unixTime) {
+    const date = new Date(unixTime);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 // 递归拉取指定delivery_time的所有数据
 const fetchAllDataForDay = (deliveryTime, fetchedDataForDay = [], skip = 0) => {
     return new Promise((resolve, reject) => {
@@ -16,7 +27,7 @@ const fetchAllDataForDay = (deliveryTime, fetchedDataForDay = [], skip = 0) => {
                 fetchedDataForDay = fetchedDataForDay.concat(data);
 
                 // 如果拉取的数据数量为20，可能还有更多数据，继续拉取
-                if (data.length === 20 && data.length>0) {
+                if (data.length === 20 && data.length > 0) {
                     resolve(fetchAllDataForDay(deliveryTime, fetchedDataForDay, skip + 20));
                 } else {
                     resolve(fetchedDataForDay);
@@ -27,6 +38,63 @@ const fetchAllDataForDay = (deliveryTime, fetchedDataForDay = [], skip = 0) => {
             });
     });
 };
+// 查询订单的辅助函数
+const PAGE_SIZE = 20; // 每页20条
+
+// 查询订单的辅助函数
+async function fetchOrders(dormitoryItem, deliveryTime, page = 0) {
+    console.log(`Fetching orders for dormitory: ${dormitoryItem}, deliveryTime: ${deliveryTime}, page: ${page}`);
+    const result = await db.collection('order_form')
+        .where({
+            dormitory: dormitoryItem,
+            delivery_time: deliveryTime
+        })
+        .skip(page * PAGE_SIZE)
+        .limit(PAGE_SIZE)
+        .get();
+    console.log(`Fetched ${result.data.length} orders for page: ${page}`);
+    return result;
+}
+
+// 处理单个订单的辅助函数
+async function handleOrder(order) {
+    console.log(`Updating order state for order ID: ${order._id}`);
+    await db.collection('order_form')
+        .doc(order._id)
+        .update({
+            data: {
+                order_state: true
+            }
+        });
+    console.log(`Order state updated successfully for order ID: ${order._id}`);
+
+    console.log(`Sending notification for order ID: ${order._id}`);
+    const formattedDealTime = formatUnixTime(order.created_time);
+    console.log("formattedDealTime:", formattedDealTime);
+    const data2log = {
+        openid: order._openid,
+        trade_no: order.trade_no,
+        goods: "代取快递",
+        address: order.dormitory,
+        cost: (order.cost).toString(),
+        deal_time: formattedDealTime
+    }
+    console.log("data2log:", data2log);
+
+    const notifyResult = await wx.cloud.callFunction({
+        name: 'arrived',
+        data: {
+            openid: order._openid,
+            trade_no: order.trade_no,
+            goods: "代取快递",
+            address: order.dormitory,
+            cost: (order.cost).toString(),
+            deal_time: formattedDealTime
+        }
+    });
+    console.log(`Notification sent result for order ID ${order._id}:`, notifyResult);
+    return notifyResult;
+}
 
 Page({
 
@@ -77,7 +145,7 @@ Page({
             let remarks = "测试留言" + Math.random().toString(36).substr(2, 5);
             let cost = this.randomChoice([2, 4, 6, 8]);
             let created_time = new Date().getTime();
-
+            let trade_no = Date.now().toString() + Math.floor(Math.random() * 1000).toString()
             db.collection('order_form').add({
                 data: {
                     category: 'pick_up',
@@ -92,6 +160,7 @@ Page({
                     remarks: remarks,
                     order_state: false,
                     delivery_time: "None",
+                    trade_no: trade_no,
                     cost: cost,
                     created_time: created_time
                 },
@@ -135,7 +204,7 @@ Page({
         });
     },
     fetch_today: function (event) {
-        let that  = this;
+        let that = this;
         console.log("fetch_today is called")
         let slot = event.currentTarget.dataset.slot; // 这将得到 "0"/"1"
         console.log("slot:", slot);
@@ -162,7 +231,7 @@ Page({
                     allData = allData.concat(data);
 
                     // 如果拉取的数据数量为20，可能还有更多数据，继续拉取
-                    if (data.length >0 && data.length === 20) {
+                    if (data.length > 0 && data.length === 20) {
                         fetchPageData(skip + 20);
                     } else {
                         processData(allData);
@@ -424,42 +493,52 @@ Page({
         let that = this;
         const dormitoryItem = event.currentTarget.dataset.dormitory;
         const deliveryTime = this.data.delivery_time;
-        wx.showToast(
-            {
-                title: '通知' + dormitoryItem + "中",
-                icon: 'loading',
-                duration: 10000
-            }
-        )
-        // 查询并更新数据库
-        db.collection('order_form')
-            .where({
-                dormitory: dormitoryItem,
-                delivery_time: deliveryTime
-            })
-            .update({
-                data: {
-                    order_state: true
-                },
-                success: function (res) {
-                    console.log(`成功更新了${res.stats.updated}条记录`);
-                    wx.showToast(
-                        {
-                            title: '通知成功',
-                            icon: 'success',
-                            duration: 3000
-                        }
-                    )
-                    that.setData({
-                        show_notification_dialog: false
-                    })
-                    that.fetch_last_week();
-                },
-                fail: function (err) {
-                    console.error("更新数据库时发生错误：", err);
+
+        wx.showToast({
+            title: '通知' + dormitoryItem + "中",
+            icon: 'loading',
+            duration: 10000
+        });
+
+        async function processAllOrders(page = 0) {
+            const res = await fetchOrders(dormitoryItem, deliveryTime, page);
+            const orders = res.data;
+            console.log("fetchOrders:", orders);
+            if (!orders.length) {
+                if (page === 0) {
+                    console.error("没有找到对应的订单");
                 }
+                return;
+            }
+
+            for (const order of orders) {
+                await handleOrder(order);
+            }
+
+            // 如果返回的数据和每页的大小相同，表示可能还有更多数据，需要继续处理下一页
+            if (orders.length === PAGE_SIZE) {
+                await processAllOrders(page + 1);
+            }
+        }
+
+        processAllOrders()
+            .then(() => {
+                wx.showToast({
+                    title: '通知成功',
+                    icon: 'success',
+                    duration: 3000
+                });
+                that.setData({
+                    show_notification_dialog: false
+                });
+                that.fetch_last_week();
+            })
+            .catch(err => {
+                console.error("操作失败：", err);
             });
-    },
+    }
+    ,
+
 
     /**
      * 生命周期函数--监听页面加载
