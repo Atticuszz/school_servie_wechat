@@ -3,6 +3,7 @@
 <van-notice-bar
         left-icon="volume-o"
         text="默认只显示最近20条记录，点击搜索栏小飞机图标拉取所有。有问题客服在等你~"
+        speed="{{ notice_bar_speed }}"
 />
 <van-search
   shape="round"

@@ -27,10 +27,23 @@
     />
 </van-grid>
 <van-cell-group>
+    <!--    邀请码-->
     <van-cell clickable="{{true}}"
-              is-link="{{true}}"
-              title="发布"
-              icon="smile-comment-o"/>
+              is-link="{{false}}"
+              title="邀请好友"
+              icon="friends-o"
+              custom-style="position: relative;">
+        <!-- 插槽内容 -->
+        <van-button open-type="share"
+                    plain
+                    custom-style="background-color: transparent; border: none; position: absolute; right: 1px; top: 50%; transform: translateY(-50%);">
+            <van-icon name="arrow" size="16px" color="#969799"/>
+        </van-button>
+    </van-cell>
+<!--    <van-cell clickable="{{true}}"-->
+<!--              is-link="{{true}}"-->
+<!--              title="发布"-->
+<!--              icon="smile-comment-o"/>-->
     <view style="height: 2px;"></view>
 
     <van-cell clickable="{{true}}"
@@ -129,19 +142,7 @@
     </van-dialog>
     <!--  分割线   -->
     <view style="height: 2px;"></view>
-    <!--    邀请码-->
-    <van-cell clickable="{{true}}"
-              is-link="{{false}}"
-              title="邀请好友"
-              icon="friends-o"
-              custom-style="position: relative;">
-        <!-- 插槽内容 -->
-        <van-button open-type="share"
-                    plain
-                    custom-style="background-color: transparent; border: none; position: absolute; right: 1px; top: 50%; transform: translateY(-50%);">
-            <van-icon name="arrow" size="16px" color="#969799"/>
-        </van-button>
-    </van-cell>
+
 
     <!--  分割线   -->
     <view style="height: 2px;"></view>
@@ -151,9 +152,6 @@
 
 </van-cell-group>
 
-
-        <!--底部-->
-<van-divider>底部</van-divider>
 
 
 

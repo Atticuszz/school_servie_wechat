@@ -9,6 +9,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        notice_bar_speed: 120,
         search_value: '',
         delivery_sites: app.globalData.express_site_list,
         //状态条

@@ -5,6 +5,7 @@
 <van-notice-bar
         left-icon="volume-o"
         text="新用户自动赠送+5000积分,邀请好友即得+2888积分~,邀请无上限！"
+        speed="{{notice_bar_speed}}"
 
 />
 <van-tabs animated sticky>

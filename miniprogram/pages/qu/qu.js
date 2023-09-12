@@ -31,7 +31,7 @@ Page({
             },
             {
                 name: '大的',
-                subname: '你抱着都很费劲的大玩意',
+                subname: '你抱着有点累的',
                 value: 2
             },
             {
@@ -250,25 +250,24 @@ Page({
         } else {
             console.log("地址:", this.data.address)
         }
-        // 检查取件码是否为纯数字
-        if (!this.isNumeric(this.data.pick_up_code)) {
-            // wx.showToast({
-            //     title: '取件码应该是纯数字',
-            //     icon: 'none',
-            //     duration: 2000
-            // });
-            Toast.fail({
-                message: '取件码应该是纯数字',
-                duration: 2500,
-                forbidClick: true,
-                context: that,
-            })
-            that.setData({
-                submit_loading: false
-            })
-            return false;
-        }
-
+        // // 检查取件码是否为纯数字
+        // if (!this.isNumeric(this.data.pick_up_code)) {
+        //     // wx.showToast({
+        //     //     title: '取件码应该是纯数字',
+        //     //     icon: 'none',
+        //     //     duration: 2000
+        //     // });
+        //     Toast.fail({
+        //         message: '取件码应该是纯数字',
+        //         duration: 2500,
+        //         forbidClick: true,
+        //         context: that,
+        //     })
+        //     that.setData({
+        //         submit_loading: false
+        //     })
+        //     return false;
+        // }
         // 检查快递大小
         if (this.data.express_size === -1) {
             // wx.showToast({

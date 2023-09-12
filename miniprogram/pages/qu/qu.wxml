@@ -83,7 +83,7 @@
             required
             auto-focus
             input-align="right"
-            placeholder="你的取件码/快递单号"
+            placeholder="你的取件码/隐私号填快递单号"
             clearable="aspectFill"
             placeholder-style="font-size:32rpx;"
             bind:change="onChange_pick_up_code"

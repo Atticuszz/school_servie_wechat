@@ -10,6 +10,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        notice_bar_speed: 120,
         password: '',
         imageUrl: {
             'coupon': "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E5%9B%BE%E6%A0%87/coupon2.jpg?sign=eb17a87f619374daa89e6f18d8402e08&t=1693986436"
