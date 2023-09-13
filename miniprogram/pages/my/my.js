@@ -7,6 +7,8 @@ Page({
      * 页面的初始数据
      */
     data: {
+        customer_service_qrimage_url:"https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E4%B8%AA%E4%BA%BA%E7%95%8C%E9%9D%A2/customer_service.jpg?sign=762bf02d83be55717c79eda939d92c19&t=1694581026",
+        show_customer_service_image: false,
         qr_images:[
             {
                 "url": "https://7363-school2service-0gp1dcf9a73528f4-1318358380.tcb.qcloud.la/%E5%9F%BA%E6%9C%AC%E5%9B%BE%E7%89%87/%E7%BE%A4%E4%BA%8C%E7%BB%B4%E7%A0%81/%E5%94%AE%E5%90%8E-6.jpg?sign=d98a8d1a6e0c3c3a0b4ed285091743e5&t=1694245672",
@@ -190,6 +192,12 @@ Page({
         this.setData({
             show_group_image_dialog: true,
         })
+    },
+    show_customer_service_image_dialog: function (e) {
+        this.setData({
+            show_customer_service_image: true,
+        })
+
     },
     /**
      * 生命周期函数--监听页面加载

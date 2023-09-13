@@ -112,9 +112,23 @@
     <!--  分割线   -->
     <view style="height: 2px;"></view>
 
-    <van-cell title="客服"
-              value="微信号：ywb_123456"
-              icon="service-o"/>
+    <van-cell clickable="{{true}}"
+              is-link="{{true}}"
+              label="点击弹窗添加客服微信"
+              value=""
+              title="客服" icon="service-o" bind:click="show_customer_service_image_dialog"/>
+    <van-dialog show="{{ show_customer_service_image }}"
+                use-slot
+                width="350px"
+                showCancelButton="{{true}}"
+                showConfirmButton="{{false}}"
+                theme="round-button"
+                title="客服微信">
+                <image src="{{customer_service_qrimage_url}}" show-menu-by-longpress="{{true}}" mode="aspectFit" style="margin-left:4%"></image>
+
+
+
+    </van-dialog>
 
     <!--  分割线   -->
     <view style="height: 2px;"></view>
