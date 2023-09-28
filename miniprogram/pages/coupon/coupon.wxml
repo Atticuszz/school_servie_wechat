@@ -2,6 +2,7 @@
 
         <!-- 这里是你的其他 WXML 代码 -->
 <van-toast id="van-toast"/>
+
 <van-notice-bar
         left-icon="volume-o"
         text="新用户自动赠送+5000积分,邀请好友即得+2888积分~,邀请无上限！"
@@ -167,7 +168,7 @@
 
             </van-field>
             <van-cell style="width:20rpx">
-                <van-button size="mini" type="primary" >
+                <van-button size="mini" type="primary">
                     领取积分
                 </van-button>
             </van-cell>

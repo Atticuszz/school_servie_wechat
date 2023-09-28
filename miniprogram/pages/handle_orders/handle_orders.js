@@ -381,6 +381,7 @@ Page({
                                     // 保存文件到系统相册。用户可以在文件管理器中打开。
                                     // 注意: 因为你下载的是Excel文件, 所以不能使用saveImageToPhotosAlbum
                                     // 你可以使用其他方法来保存或打开文件，如wx.openDocument
+                                    // 文件名后缀有问题
                                     wx.openDocument({
                                         filePath: res.tempFilePath,
                                         fileType: 'xlsx',

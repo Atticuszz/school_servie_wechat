@@ -49,7 +49,7 @@ Page({
         pick_up_code: '',  //取件码或者快递单号
         remarks: '',  //用户评论
         final_cost: 999,
-        prices: [2, 4, 8, 12, 999],
+        prices: [2.02, 4.08, 8.16, 12.24, 999],
 
         // 地址信息
         address: {},
@@ -466,6 +466,8 @@ Page({
                     success(res) {
                         console.log('successfully called wx.requestPayment,res', res)
                         console.log("支付成功:" + that.data.final_cost + "$");
+                        //支付成功之后才能提交表单
+                        that.add_order_form(trade_no);
                         // 请求订阅消息权限
                         wx.requestSubscribeMessage({
                             tmplIds: ["LKBC9IqOwtwKmzG7G2KSpvs_4dJ45_dSL0_5mum3SfM", "qAVo5ed6_mwB4D1WYVaI7xULItzxOUR8_-P5v_bgleg"],
@@ -493,8 +495,7 @@ Page({
                             }
                         });
 
-                        //支付成功之后才能提交表单
-                        that.add_order_form(trade_no);
+
 
                     },
                     fail(err) {
@@ -634,6 +635,7 @@ Page({
                     icon: 'none',
                     duration: 4500 // 持续时间为3秒
                 });
+
             }
         })
         // 订单记录，用户查看
